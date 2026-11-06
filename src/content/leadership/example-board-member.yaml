@@ -1,0 +1,14 @@
+# Example entry for a member of the Board of Directors. Copy, rename, fill in and set status: published.
+status: draft
+tier: board
+order: 1
+name: '[Replace with full name]'
+designation:
+  en: '[Replace with designation, for example Director]'
+bio:
+  en: '[Replace with a short, verified biography.]'
+background:
+  en: '[Replace with professional background.]'
+# photo: ./full-name.jpg
+# photoAlt:
+#   en: Portrait of the director

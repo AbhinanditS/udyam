@@ -1,0 +1,97 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import AnnouncementStrip from '@/components/layout/AnnouncementStrip.astro';
+import Hero from '@/components/home/Hero.astro';
+import QuickAccess from '@/components/home/QuickAccess.astro';
+import StatsBand from '@/components/home/StatsBand.astro';
+import Overview from '@/components/home/Overview.astro';
+import CollaborationsPreview from '@/components/home/CollaborationsPreview.astro';
+import WorkAreaGrid from '@/components/sections/WorkAreaGrid.astro';
+import TestimonialCarousel from '@/components/sections/TestimonialCarousel.astro';
+import Button from '@/components/ui/Button.astro';
+import CtaBand from '@/components/ui/CtaBand.astro';
+import EditorialNote from '@/components/ui/EditorialNote.astro';
+import Icon from '@/components/ui/Icon.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { siteConfig } from '@/data/site-config';
+import { localeStaticPaths } from '@/i18n';
+import { getApprovedTestimonials } from '@/utils/content';
+import { pageContext } from '@/utils/locale';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const { t, href } = pageContext(Astro.url);
+const testimonials = await getApprovedTestimonials();
+---
+
+<BaseLayout title={t.home.seoTitle} description={t.home.seoDescription} isHome>
+  <AnnouncementStrip />
+  <Hero />
+  <QuickAccess />
+  <StatsBand />
+  <Overview />
+
+  <section class="section border-y border-line bg-band" aria-labelledby="work-areas-title">
+    <div class="container-site">
+      <SectionHeading
+        id="work-areas-title"
+        eyebrow={t.home.workAreas.eyebrow}
+        title={t.home.workAreas.title}
+        lead={t.home.workAreas.lead}
+      >
+        <a slot="action" href={href('whatWeDo')} class="link-arrow">
+          {t.home.workAreas.link}
+          <Icon name="arrow-right" size={18} />
+        </a>
+      </SectionHeading>
+      <div class="mt-10">
+        <WorkAreaGrid label={t.whatWeDo.gridLabel} />
+      </div>
+    </div>
+  </section>
+
+  {
+    testimonials.length > 0 ? (
+      <section class="section" aria-labelledby="stories-title">
+        <div class="container-site">
+          <SectionHeading
+            id="stories-title"
+            eyebrow={t.home.stories.eyebrow}
+            title={t.home.stories.title}
+            lead={t.home.stories.lead}
+          >
+            <a slot="action" href={href('testimonials')} class="link-arrow">
+              {t.home.stories.link}
+              <Icon name="arrow-right" size={18} />
+            </a>
+          </SectionHeading>
+          <div class="mt-10">
+            <TestimonialCarousel items={testimonials} id="home-stories" />
+          </div>
+        </div>
+      </section>
+    ) : (
+      siteConfig.showEditorialNotes && (
+      <div class="container-site py-8">
+        <EditorialNote file="src/content/testimonials/">
+          The impact stories section appears here once a testimonial has status: approved, consent: true and an
+          approved quotation.
+        </EditorialNote>
+      </div>
+      )
+    )
+  }
+
+  <CollaborationsPreview />
+
+  <CtaBand title={t.home.finalCta.title} text={t.home.finalCta.text} id="final-cta-title">
+    <Button href={href('collaborations', 'partner-with-us')} variant="gold" icon="arrow-right">
+      {t.home.finalCta.partner}
+    </Button>
+    <Button href={href('contact')} variant="on-dark">
+      {t.home.finalCta.contact}
+    </Button>
+  </CtaBand>
+</BaseLayout>

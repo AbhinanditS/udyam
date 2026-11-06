@@ -1,0 +1,103 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import CareerCard from '@/components/careers/CareerCard.astro';
+import TallyForm from '@/components/forms/TallyForm.astro';
+import Button from '@/components/ui/Button.astro';
+import EmptyState from '@/components/ui/EmptyState.astro';
+import Icon, { type AnyIconName } from '@/components/ui/Icon.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { localeStaticPaths } from '@/i18n';
+import { getOpenCareers } from '@/utils/content';
+import { pageContext } from '@/utils/locale';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const { t, href } = pageContext(Astro.url);
+const copy = t.careers;
+const categories = copy.categories.items;
+const icons: Record<keyof typeof categories, AnyIconName> = {
+  trainers: 'presentation',
+  researchers: 'file-search',
+  consultants: 'lightbulb',
+  internships: 'graduation-cap',
+  fellowships: 'award',
+  'programme-operations': 'layers',
+};
+const openings = await getOpenCareers();
+const sections = [
+  { id: 'opportunity-areas', label: copy.sections.categories },
+  { id: 'openings', label: copy.sections.openings },
+  { id: 'expression-of-interest', label: copy.sections.interest },
+];
+---
+
+<BaseLayout
+  title={copy.seoTitle}
+  description={copy.seoDescription}
+  breadcrumbs={[
+    { name: t.nav.home, path: href('home') },
+    { name: t.nav.careers, path: href('careers') },
+  ]}
+>
+  <PageHeader
+    eyebrow={copy.header.eyebrow}
+    title={copy.header.title}
+    lead={copy.header.lead}
+    crumbs={[{ label: t.nav.careers }]}
+    sections={sections}
+  />
+
+  <section id="opportunity-areas" class="section" aria-labelledby="areas-title">
+    <div class="container-site">
+      <SectionHeading id="areas-title" index="01" eyebrow={copy.categories.eyebrow} title={copy.categories.title} />
+      <ul class="mt-10 grid gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-2 lg:grid-cols-3" data-reveal>
+        {
+          (Object.keys(categories) as (keyof typeof categories)[]).map((key) => (
+            <li class="bg-surface p-6">
+              <span class="icon-tile">
+                <Icon name={icons[key]} />
+              </span>
+              <h3 class="h4 mt-5">{categories[key].title}</h3>
+              <p class="mt-1.5 text-sm text-ink-2">{categories[key].text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section id="openings" class="section border-y border-line bg-surface" aria-labelledby="openings-title">
+    <div class="container-site">
+      <SectionHeading id="openings-title" index="02" eyebrow={copy.openings.eyebrow} title={copy.openings.title} />
+      <div class="mt-10 space-y-4">
+        {
+          openings.length > 0 ? (
+            openings.map((role) => <CareerCard role={role} />)
+          ) : (
+            <EmptyState icon="briefcase-business" title={copy.openings.emptyTitle} text={copy.openings.emptyText} tone="muted">
+              <Button href="#expression-of-interest" variant="secondary" icon="arrow-down">
+                {copy.interest.title}
+              </Button>
+            </EmptyState>
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="expression-of-interest" class="section" aria-labelledby="interest-title">
+    <div class="container-site grid gap-10 lg:grid-cols-12">
+      <div class="lg:col-span-5">
+        <SectionHeading id="interest-title" index="03" eyebrow={copy.interest.eyebrow} title={copy.interest.title} lead={copy.interest.text} />
+      </div>
+      <div class="lg:col-span-7">
+        <div class="card p-6 sm:p-8">
+          <TallyForm form="careers" height={640} />
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

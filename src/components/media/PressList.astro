@@ -1,0 +1,50 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Icon from '@/components/ui/Icon.astro';
+import LangText from '@/components/ui/LangText.astro';
+import { formatDate } from '@/i18n';
+import { formatFileSize, getDocument } from '@/utils/documents';
+import { pageContext } from '@/utils/locale';
+
+interface Props {
+  items: CollectionEntry<'press'>[];
+}
+
+const { items } = Astro.props;
+const { locale, t } = pageContext(Astro.url);
+---
+
+<ul class="divide-y divide-line border-y border-line">
+  {
+    items.map((item) => {
+      const doc = getDocument(item.data.file);
+      const link = item.data.url ?? doc?.href;
+      const external = Boolean(item.data.url);
+      return (
+        <li class="grid gap-3 py-6 md:grid-cols-[10rem_1fr_auto] md:items-baseline md:gap-8">
+          <p class="meta tabular">{formatDate(item.data.date, locale)}</p>
+          <div>
+            <span class="badge">{t.media.press.types[item.data.type]}</span>
+            <LangText value={item.data.title} as="h3" class="h4 mt-3" />
+            {item.data.outlet && <p class="mt-1 text-sm text-ink-3">{item.data.outlet}</p>}
+            {item.data.summary && <LangText value={item.data.summary} as="p" class="mt-2 max-w-[62ch] text-ink-2" />}
+          </div>
+          {link && (
+            <a
+              href={link}
+              class="link-arrow text-sm"
+              target={external ? '_blank' : undefined}
+              rel={external ? 'noopener noreferrer' : undefined}
+              download={!external ? '' : undefined}
+            >
+              {external ? t.media.press.read : t.common.download}
+              {doc && <span class="meta">{doc.extension} · {formatFileSize(doc.bytes, { mb: t.common.sizeMb, kb: t.common.sizeKb })}</span>}
+              <Icon name={external ? 'arrow-up-right' : 'download'} size={16} />
+              {external && <span class="sr-only">{t.common.opensInNewTab}</span>}
+            </a>
+          )}
+        </li>
+      );
+    })
+  }
+</ul>

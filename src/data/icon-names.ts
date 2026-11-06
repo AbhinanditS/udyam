@@ -1,0 +1,53 @@
+/**
+ * Icon names that content files may use (for example `icon: presentation` in a work area).
+ * Each name maps to a Lucide icon in src/components/ui/Icon.astro. See https://lucide.dev/icons
+ * To add an icon, add its name here and import it in Icon.astro.
+ */
+export const iconNames = [
+  'presentation',
+  'user-check',
+  'smartphone',
+  'book-open',
+  'handshake',
+  'file-search',
+  'award',
+  'users',
+  'briefcase-business',
+  'landmark',
+  'banknote',
+  'heart-handshake',
+  'graduation-cap',
+  'network',
+  'school',
+  'badge-check',
+  'clipboard-list',
+  'chart-column',
+  'route',
+  'scroll-text',
+  'file-text',
+  'newspaper',
+  'library',
+  'target',
+  'search',
+  'store',
+  'building',
+  'calendar',
+  'map-pin',
+  'mail',
+  'phone',
+  'globe',
+  'image',
+  'video',
+  'download',
+  'quote',
+  'info',
+  'lightbulb',
+  'notebook-pen',
+  'layers',
+  'messages-square',
+  'shield-check',
+  'log-in',
+  'monitor-smartphone',
+] as const;
+
+export type IconName = (typeof iconNames)[number];

@@ -1,0 +1,165 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import TallyPopupLink from '@/components/forms/TallyPopupLink.astro';
+import EventCard from '@/components/media/EventCard.astro';
+import GalleryGrid from '@/components/media/GalleryGrid.astro';
+import PressList from '@/components/media/PressList.astro';
+import PublicationCard from '@/components/media/PublicationCard.astro';
+import Button from '@/components/ui/Button.astro';
+import EditorialNote from '@/components/ui/EditorialNote.astro';
+import EmptyState from '@/components/ui/EmptyState.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { localeStaticPaths } from '@/i18n';
+import {
+  getPublishedGallery,
+  getPublishedPress,
+  getPublishedPublications,
+  getUpcomingEvents,
+} from '@/utils/content';
+import { getDocument } from '@/utils/documents';
+import { pageContext } from '@/utils/locale';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const PREVIEW_COUNT = 6;
+const { t, href } = pageContext(Astro.url);
+const copy = t.media;
+const events = await getUpcomingEvents();
+const draftEvents = await getCollection('events', ({ data }) => data.status !== 'published' || !data.confirmed);
+const gallery = await getPublishedGallery();
+const press = await getPublishedPress();
+const publications = (await getPublishedPublications(['newsletter', 'publication'])).filter((item) =>
+  getDocument(item.data.file),
+);
+const sections = [
+  { id: 'events', label: copy.sections.events },
+  { id: 'gallery', label: copy.sections.gallery },
+  { id: 'press', label: copy.sections.press },
+  { id: 'publications', label: copy.sections.publications },
+];
+---
+
+<BaseLayout
+  title={copy.seoTitle}
+  description={copy.seoDescription}
+  breadcrumbs={[
+    { name: t.nav.home, path: href('home') },
+    { name: t.nav.media, path: href('media') },
+  ]}
+>
+  <PageHeader
+    eyebrow={copy.header.eyebrow}
+    title={copy.header.title}
+    lead={copy.header.lead}
+    crumbs={[{ label: t.nav.media }]}
+    sections={sections}
+  />
+
+  <section id="events" class="section" aria-labelledby="events-title">
+    <div class="container-site">
+      <SectionHeading id="events-title" index="01" eyebrow={copy.events.eyebrow} title={copy.events.title} />
+      <div class="mt-10 space-y-4">
+        {
+          events.length > 0 ? (
+            events.map((event) => <EventCard event={event} />)
+          ) : (
+            <EmptyState icon="calendar" title={copy.events.emptyTitle} text={copy.events.emptyText}>
+              <TallyPopupLink
+                form="newsletter"
+                label={t.footer.newsletterButton}
+                unavailable={t.footer.newsletterUnavailable}
+                thanks={t.footer.newsletterThanks}
+                variant="secondary"
+              />
+            </EmptyState>
+          )
+        }
+        {
+          draftEvents.length > 0 && (
+            <EditorialNote file="src/content/events/">
+              {draftEvents.length} event draft(s) are hidden until confirmed:{' '}
+              {draftEvents.map((event) => `${event.data.title.en} (${event.data.location.en})`).join('; ')}. Add the
+              confirmed date, set confirmed: true and status: published.
+            </EditorialNote>
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery" class="section border-y border-line bg-surface" aria-labelledby="gallery-title">
+    <div class="container-site">
+      <SectionHeading id="gallery-title" index="02" eyebrow={copy.gallery.eyebrow} title={copy.gallery.title}>
+        {
+          gallery.length > PREVIEW_COUNT && (
+            <a slot="action" href={href('gallery')} class="link-arrow">
+              {copy.gallery.viewAll}
+            </a>
+          )
+        }
+      </SectionHeading>
+      <div class="mt-10">
+        {
+          gallery.length > 0 ? (
+            <GalleryGrid items={gallery.slice(0, PREVIEW_COUNT)} id="media-preview" />
+          ) : (
+            <EmptyState icon="image" title={copy.gallery.emptyTitle} text={copy.gallery.emptyText} tone="muted" />
+          )
+        }
+        {
+          gallery.length > PREVIEW_COUNT && (
+            <div class="mt-8">
+              <Button href={href('gallery')} variant="secondary" icon="arrow-right">
+                {copy.gallery.viewAll}
+              </Button>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="press" class="section" aria-labelledby="press-title">
+    <div class="container-site">
+      <SectionHeading id="press-title" index="03" eyebrow={copy.press.eyebrow} title={copy.press.title} />
+      <div class="mt-10">
+        {
+          press.length > 0 ? (
+            <PressList items={press} />
+          ) : (
+            <EmptyState icon="newspaper" title={copy.press.emptyTitle} text={copy.press.emptyText} />
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="publications" class="section border-t border-line bg-surface" aria-labelledby="publications-title">
+    <div class="container-site">
+      <SectionHeading id="publications-title" index="04" eyebrow={copy.publications.eyebrow} title={copy.publications.title}>
+        <a slot="action" href={href('research', 'library')} class="link-arrow">
+          {t.nav.research}
+        </a>
+      </SectionHeading>
+      <div class="mt-10">
+        {
+          publications.length > 0 ? (
+            <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {publications.map((item) => (
+                <li>
+                  <PublicationCard item={item} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <EmptyState icon="library" title={copy.publications.emptyTitle} text={copy.publications.emptyText} tone="muted" />
+          )
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,59 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import Icon from '@/components/ui/Icon.astro';
+import LangText from '@/components/ui/LangText.astro';
+import { fill, formatDate, pickText } from '@/i18n';
+import { formatFileSize, getDocument } from '@/utils/documents';
+import { pageContext } from '@/utils/locale';
+
+interface Props {
+  item: CollectionEntry<'publications'>;
+}
+
+const { item } = Astro.props;
+const { locale, t } = pageContext(Astro.url);
+const data = item.data;
+const doc = getDocument(data.file);
+const title = pickText(data.title, locale);
+---
+
+{
+  doc && (
+    <article class="stretched-card card card-interactive group flex h-full flex-col overflow-hidden">
+      <div class="aspect-[4/3] border-b border-line bg-navy-50">
+        {data.thumbnail ? (
+          <Image
+            src={data.thumbnail}
+            alt={fill(t.research.library.preview, { title })}
+            width={640}
+            class="h-full w-full object-cover object-top"
+            loading="lazy"
+          />
+        ) : (
+          <div class="flex h-full items-center justify-center" aria-hidden="true">
+            <Icon name="file-text" size={44} strokeWidth={1.25} class="text-navy-300" />
+          </div>
+        )}
+      </div>
+      <div class="flex flex-1 flex-col p-5">
+        <p class="meta">
+          {t.research.categories.items[data.category].title} · {formatDate(data.date, locale, { month: 'short', year: 'numeric' })}
+        </p>
+        <h3 class="h4 mt-2">
+          <a href={doc.href} class="stretched-link" download>
+            <LangText value={data.title} />
+          </a>
+        </h3>
+        <LangText value={data.description} as="p" class="mt-2 flex-1 text-sm text-ink-2" />
+        <p class="mt-5 flex items-center gap-2 text-sm font-bold text-navy-700" aria-hidden="true">
+          <Icon name="download" size={16} />
+          {t.common.download}
+          <span class="meta">
+            {doc.extension} · {formatFileSize(doc.bytes, { mb: t.common.sizeMb, kb: t.common.sizeKb })}
+          </span>
+        </p>
+      </div>
+    </article>
+  )
+}

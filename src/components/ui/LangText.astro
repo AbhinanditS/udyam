@@ -1,0 +1,32 @@
+---
+/**
+ * Renders localized content. When the Hindi version is missing, the English text is shown
+ * with lang="en" so assistive technology reads it correctly, plus an optional notice.
+ */
+import { pick, type LocalizedText } from '@/i18n';
+import { pageContext } from '@/utils/locale';
+
+interface Props {
+  value: LocalizedText;
+  as?: 'span' | 'p' | 'h2' | 'h3' | 'h4' | 'blockquote' | 'div' | 'li' | 'dd' | 'strong';
+  class?: string;
+  /** Shows a small "Available in English only" label after fallback text. */
+  notice?: boolean;
+  id?: string;
+}
+
+const { value, as: Tag = 'span', class: className, notice = false, id } = Astro.props;
+const { locale, t } = pageContext(Astro.url);
+const { text, lang, isFallback } = pick(value, locale);
+---
+
+<Tag class={className} lang={isFallback ? lang : undefined} id={id}>
+  {text}
+  {
+    isFallback && notice && (
+      <span class="badge ml-2 align-middle" lang={locale}>
+        {t.common.englishOnly}
+      </span>
+    )
+  }
+</Tag>

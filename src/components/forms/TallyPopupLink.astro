@@ -1,0 +1,59 @@
+---
+/**
+ * Opens a Tally form as a popup (for example the newsletter). The link also works without
+ * JavaScript: it opens the form on tally.so in a new tab.
+ */
+import Icon from '@/components/ui/Icon.astro';
+import { siteConfig, type FormKey } from '@/data/site-config';
+import { parseTallyUrl } from '@/utils/tally';
+import { pageContext } from '@/utils/locale';
+import EditorialNote from '@/components/ui/EditorialNote.astro';
+
+interface Props {
+  form: FormKey;
+  label: string;
+  unavailable: string;
+  thanks: string;
+  variant?: 'gold' | 'primary' | 'secondary' | 'on-dark';
+  class?: string;
+}
+
+const { form, label, unavailable, thanks, variant = 'gold', class: className } = Astro.props;
+const { t } = pageContext(Astro.url);
+const parsed = parseTallyUrl(siteConfig.forms[form]);
+const statusId = `tally-status-${form}`;
+const envName = `PUBLIC_TALLY_${form.toUpperCase()}_URL`;
+---
+
+{
+  parsed ? (
+    <div class={className}>
+      <a
+        href={parsed.shareUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class:list={['btn', `btn-${variant}`]}
+        data-tally-popup={parsed.id ?? undefined}
+        data-thanks={thanks}
+        data-status-target={statusId}
+      >
+        <span>{label}</span>
+        <Icon name="arrow-right" size={18} />
+        <span class="sr-only">{t.common.opensInNewTab}</span>
+      </a>
+      <p id={statusId} class="mt-3 text-sm empty:hidden" role="status" aria-live="polite" />
+    </div>
+  ) : (
+    <div class={className}>
+      <p class="text-sm font-bold">{unavailable}</p>
+      <EditorialNote class="mt-3" file={`.env or Cloudflare Pages: ${envName}`}>
+        Add the Tally share link of this form to enable it.
+      </EditorialNote>
+    </div>
+  )
+}
+
+<script>
+  import { initTallyPopups } from '@/scripts/tally';
+  initTallyPopups();
+</script>

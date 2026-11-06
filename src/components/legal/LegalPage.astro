@@ -1,0 +1,55 @@
+---
+import { getEntry, render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import EditorialNote from '@/components/ui/EditorialNote.astro';
+import Icon from '@/components/ui/Icon.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
+import { fill, formatDate } from '@/i18n';
+import { pageContext } from '@/utils/locale';
+
+interface Props {
+  page: 'terms' | 'privacy';
+}
+
+const { page } = Astro.props;
+const { locale, t, href } = pageContext(Astro.url);
+const copy = t.legal[page];
+// A Hindi version can be added later as src/content/legal/hi/<page>.md
+const entry = (locale === 'hi' ? await getEntry('legal', `hi/${page}`) : undefined) ?? (await getEntry('legal', page));
+if (!entry) throw new Error(`Missing legal page: src/content/legal/${page}.md`);
+const { Content } = await render(entry);
+const isFallback = entry.data.locale !== locale;
+---
+
+<BaseLayout
+  title={copy.seoTitle}
+  description={copy.seoDescription}
+  breadcrumbs={[
+    { name: t.nav.home, path: href('home') },
+    { name: t.nav[page], path: href(page) },
+  ]}
+>
+  <PageHeader eyebrow={t.footer.legal} title={copy.title} crumbs={[{ label: t.nav[page] }]}>
+    <p class="meta mt-6">{fill(t.legal.lastUpdated, { date: formatDate(entry.data.lastUpdated, locale) })}</p>
+  </PageHeader>
+
+  <section class="section" aria-label={copy.title}>
+    <div class="container-site">
+      {
+        isFallback && (
+          <p class="panel-muted mb-10 flex max-w-[70ch] gap-3 p-4 text-ink-2" role="note">
+            <Icon name="info" size={20} class="mt-0.5 shrink-0" />
+            {t.common.englishOnlyNotice}
+          </p>
+        )
+      }
+      <EditorialNote class="mb-8 max-w-[70ch]" file={`src/content/legal/${page}.md`}>
+        This text was drafted for the website and describes how the site works. Have it reviewed by legal counsel, and add
+        the grievance contact required under Indian data protection law, before launch.
+      </EditorialNote>
+      <article class="prose-site" lang={entry.data.locale}>
+        <Content />
+      </article>
+    </div>
+  </section>
+</BaseLayout>

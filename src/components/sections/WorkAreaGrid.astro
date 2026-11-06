@@ -1,0 +1,22 @@
+---
+import WorkAreaCard from './WorkAreaCard.astro';
+import { getWorkAreas } from '@/utils/content';
+
+interface Props {
+  headingLevel?: 'h2' | 'h3';
+  label?: string;
+}
+
+const { headingLevel = 'h3', label } = Astro.props;
+const areas = await getWorkAreas();
+---
+
+<ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-label={label} data-reveal>
+  {
+    areas.map((area) => (
+      <li>
+        <WorkAreaCard area={area} headingLevel={headingLevel} />
+      </li>
+    ))
+  }
+</ul>

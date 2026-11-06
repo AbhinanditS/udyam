@@ -1,0 +1,72 @@
+---
+/**
+ * Link or button with the site's interaction states. External links open in a new tab
+ * and announce it to screen readers.
+ */
+import Icon, { type AnyIconName } from './Icon.astro';
+import { isExternal } from '@/utils/urls';
+import { pageContext } from '@/utils/locale';
+
+interface Props {
+  href?: string | undefined;
+  variant?: 'primary' | 'secondary' | 'gold' | 'on-dark';
+  size?: 'md' | 'sm';
+  icon?: AnyIconName | undefined;
+  iconPosition?: 'start' | 'end';
+  /** Short status label shown inside the button, for example "Coming soon". */
+  badge?: string | undefined;
+  download?: boolean;
+  type?: 'button' | 'submit';
+  class?: string;
+  [attribute: string]: unknown;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  icon,
+  iconPosition = 'end',
+  badge,
+  download = false,
+  type = 'button',
+  class: className,
+  ...attributes
+} = Astro.props;
+
+const { t } = pageContext(Astro.url);
+const newTab = Boolean(href && isExternal(href) && !download);
+const trailingIcon = iconPosition === 'end' ? (icon ?? (newTab ? 'arrow-up-right' : undefined)) : undefined;
+const leadingIcon = iconPosition === 'start' ? icon : undefined;
+const classes = ['btn', `btn-${variant}`, size === 'sm' && 'btn-sm', className];
+---
+
+{
+  href ? (
+    <a
+      href={href}
+      class:list={classes}
+      target={newTab ? '_blank' : undefined}
+      rel={newTab ? 'noopener noreferrer' : undefined}
+      download={download ? '' : undefined}
+      {...attributes}
+    >
+      {leadingIcon && <Icon name={leadingIcon} size={18} />}
+      <span>
+        <slot />
+      </span>
+      {badge && <span class="badge">{badge}</span>}
+      {trailingIcon && <Icon name={trailingIcon} size={18} />}
+      {newTab && <span class="sr-only">{t.common.opensInNewTab}</span>}
+    </a>
+  ) : (
+    <button type={type} class:list={classes} {...attributes}>
+      {leadingIcon && <Icon name={leadingIcon} size={18} />}
+      <span>
+        <slot />
+      </span>
+      {badge && <span class="badge">{badge}</span>}
+      {trailingIcon && <Icon name={trailingIcon} size={18} />}
+    </button>
+  )
+}

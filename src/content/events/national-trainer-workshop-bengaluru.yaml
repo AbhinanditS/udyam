@@ -1,0 +1,18 @@
+# Event example from the website brief. The date and confirmation are not known, so it stays a draft.
+# To publish: add startDate (YYYY-MM-DD), set confirmed: true, replace the description, set status: published.
+status: draft
+confirmed: false
+title:
+  en: 3-Day National Trainer Workshop
+  hi: तीन दिवसीय राष्ट्रीय प्रशिक्षक कार्यशाला
+location:
+  en: Bengaluru
+  hi: बेंगलुरु
+description:
+  en: '[Replace with the confirmed programme description.]'
+# startDate: 2026-12-01
+# endDate: 2026-12-03
+# image: ./workshop-photo.jpg
+# imageAlt:
+#   en: Describe what the photograph shows
+# registrationUrl: https://tally.so/r/...

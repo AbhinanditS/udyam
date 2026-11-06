@@ -1,0 +1,20 @@
+# Illustrative example named in the website brief. It does not describe a verified person or quotation.
+# The schema refuses to approve an entry while illustrative is true.
+# For a real testimonial: copy this file, set illustrative: false, add the approved quote,
+# record consent (consent: true) and set status: approved.
+status: draft
+illustrative: true
+consent: false
+name: Rita Devi
+role: entrepreneur
+quote:
+  en: '[Replace with the approved quotation.]'
+featured: true
+# location:
+#   en: District, State
+# sector:
+#   en: Sector or trade
+# photo: ./rita-devi.jpg
+# photoAlt:
+#   en: Describe the photograph
+# youtubeId: 11-character video ID

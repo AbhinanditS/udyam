@@ -1,0 +1,44 @@
+---
+import EditorialNote from '@/components/ui/EditorialNote.astro';
+import { pick } from '@/i18n';
+import { getStorySections } from '@/utils/content';
+import { pageContext } from '@/utils/locale';
+
+const { locale, t } = pageContext(Astro.url);
+const sections = await getStorySections();
+const paragraphs = (text: string) => text.split(/\n\s*\n/).map((part) => part.trim()).filter(Boolean);
+---
+
+<div class="space-y-10">
+  {
+    sections.map((section) => {
+      if (section.data.status !== 'published') {
+        return (
+          <EditorialNote file="src/content/about/story.yaml">
+            <strong>{section.data.title.en}</strong> is a draft and is hidden. {section.data.editorialNote}
+          </EditorialNote>
+        );
+      }
+      const title = pick(section.data.title, locale);
+      const body = pick({ en: section.data.body.en, hi: section.data.body.hi }, locale);
+      return (
+        <article>
+          <h3 class="h3" lang={title.isFallback ? 'en' : undefined}>
+            {title.text}
+          </h3>
+          <div class="measure mt-3 space-y-4 text-ink-2" lang={body.isFallback ? 'en' : undefined}>
+            {paragraphs(body.text).map((paragraph) => (
+              <p>{paragraph}</p>
+            ))}
+          </div>
+          {body.isFallback && <span class="badge mt-3">{t.common.englishOnly}</span>}
+          {section.data.editorialNote && (
+            <EditorialNote class="mt-4" file="src/content/about/story.yaml">
+              {section.data.editorialNote}
+            </EditorialNote>
+          )}
+        </article>
+      );
+    })
+  }
+</div>

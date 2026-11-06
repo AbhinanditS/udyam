@@ -1,0 +1,63 @@
+order: 5
+icon: handshake
+title:
+  en: Business Mentoring
+  hi: व्यवसाय मार्गदर्शन
+summary:
+  en: Post-training consultancy and advisory support that help rural enterprises stay sustainable.
+  hi: प्रशिक्षण के बाद परामर्श और सलाह, जो ग्रामीण उद्यमों को टिकाऊ बनाए रखने में मदद करती है।
+overview:
+  en: >-
+    Many enterprises need support after the classroom. We offer post-training consultancy and business mentoring that
+    help rural entrepreneurs build sustainable businesses. This includes entrepreneurs who did not train at an RSETI.
+  hi: >-
+    कई उद्यमों को कक्षा के बाद भी सहयोग की ज़रूरत होती है। हम प्रशिक्षण के बाद परामर्श और व्यवसाय मार्गदर्शन देते हैं, जो ग्रामीण उद्यमियों को
+    टिकाऊ व्यवसाय बनाने में मदद करता है। इसमें वे उद्यमी भी शामिल हैं, जिन्होंने आरसेटी में प्रशिक्षण नहीं लिया है।
+focus:
+  - id: post-training-consultancy
+    title:
+      en: Post-training consultancy
+      hi: प्रशिक्षण के बाद परामर्श
+    description:
+      en: Advisory support for entrepreneurs after they complete training.
+      hi: प्रशिक्षण पूरा करने के बाद उद्यमियों के लिए सलाह और सहयोग।
+  - id: sustainability
+    title:
+      en: Business sustainability guidance
+      hi: व्यवसाय की स्थिरता पर मार्गदर्शन
+    description:
+      en: Guidance to keep an enterprise viable over time.
+      hi: उद्यम को लंबे समय तक व्यवहार्य बनाए रखने के लिए मार्गदर्शन।
+  - id: rural-advisory
+    title:
+      en: Rural entrepreneurship advisory
+      hi: ग्रामीण उद्यमिता सलाह
+    description:
+      en: Advice suited to the conditions of rural markets and enterprises.
+      hi: ग्रामीण बाज़ारों और उद्यमों की परिस्थितियों के अनुरूप सलाह।
+  - id: non-rseti
+    title:
+      en: Mentorship for non-RSETI entrepreneurs
+      hi: गैर-आरसेटी उद्यमियों के लिए मार्गदर्शन
+    description:
+      en: Mentoring for entrepreneurs who did not train at a Rural Self Employment Training Institute (RSETI).
+      hi: उन उद्यमियों के लिए मार्गदर्शन, जिन्होंने ग्रामीण स्वरोजगार प्रशिक्षण संस्थान (आरसेटी) में प्रशिक्षण नहीं लिया है।
+  - id: business-development
+    title:
+      en: Business development support
+      hi: व्यवसाय विकास में सहयोग
+    description:
+      en: Support to find opportunities and grow an existing enterprise.
+      hi: अवसर पहचानने और मौजूदा उद्यम को बढ़ाने में सहयोग।
+audiences:
+  - en: Rural entrepreneurs
+    hi: ग्रामीण उद्यमी
+  - en: RSETI-trained and non-RSETI entrepreneurs
+    hi: आरसेटी से प्रशिक्षित और गैर-आरसेटी उद्यमी
+  - en: Self-help groups
+    hi: स्वयं सहायता समूह
+cta:
+  label:
+    en: Request mentoring support
+    hi: मार्गदर्शन सहयोग का अनुरोध करें
+  target: contact

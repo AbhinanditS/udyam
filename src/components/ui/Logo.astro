@@ -1,0 +1,42 @@
+---
+/**
+ * Temporary typographic wordmark with the geometric emblem. It is not the registered brand identity.
+ * Replace the emblem and wordmark here when the official logo is supplied.
+ */
+import Emblem from './Emblem.astro';
+import { pageContext } from '@/utils/locale';
+
+interface Props {
+  tone?: 'light' | 'dark';
+  showTagline?: boolean;
+  class?: string;
+  /** Renders the lockup without a link, for example in the footer heading. */
+  asLink?: boolean;
+}
+
+const { tone = 'light', showTagline = true, class: className, asLink = true } = Astro.props;
+const { t, href } = pageContext(Astro.url);
+const nameColor = tone === 'dark' ? 'text-on-dark' : 'text-navy-900';
+const subColor = tone === 'dark' ? 'text-on-dark-3' : 'text-ink-3';
+const Tag = asLink ? 'a' : 'div';
+---
+
+<Tag
+  href={asLink ? href('home') : undefined}
+  aria-label={asLink ? t.brand.homeLink : undefined}
+  class:list={['logo-lockup group inline-flex items-center gap-3 rounded-sm', className]}
+>
+  <Emblem size={38} tone={tone} class="shrink-0" />
+  <span class="flex flex-col">
+    <span lang="en" class:list={['text-[1.1875rem] leading-none font-black tracking-[-0.01em]', nameColor]}>
+      UdyamSetu<span class:list={['ml-1.5 text-[0.8125rem] font-bold tracking-normal', subColor]}>Pvt. Ltd.</span>
+    </span>
+    {
+      showTagline && (
+        <span class:list={['logo-tagline mt-1.5 hidden leading-none sm:block', subColor]}>
+          {t.brand.tagline.replace(/[.।]$/, '')}
+        </span>
+      )
+    }
+  </span>
+</Tag>

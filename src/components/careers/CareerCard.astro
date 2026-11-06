@@ -1,0 +1,58 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Button from '@/components/ui/Button.astro';
+import LangText from '@/components/ui/LangText.astro';
+import { fill, formatDate, pickText } from '@/i18n';
+import { pageContext } from '@/utils/locale';
+
+interface Props {
+  role: CollectionEntry<'careers'>;
+}
+
+const { role } = Astro.props;
+const { locale, t } = pageContext(Astro.url);
+const copy = t.careers.openings;
+const data = role.data;
+const applyHref = data.applyUrl ?? `mailto:${data.applyEmail}?subject=${encodeURIComponent(pickText(data.title, 'en'))}`;
+---
+
+<article class="card p-6 lg:p-8" aria-labelledby={`role-${role.id}`}>
+  <div class="flex flex-wrap items-start justify-between gap-4">
+    <div>
+      <p class="meta">{t.careers.categories.items[data.category].title}</p>
+      <LangText value={data.title} as="h3" class="h3 mt-2" id={`role-${role.id}`} />
+    </div>
+    <span class="badge">{copy.engagementTypes[data.engagement]}</span>
+  </div>
+  <dl class="mt-6 grid gap-4 border-y border-line py-4 text-sm sm:grid-cols-3">
+    <div>
+      <dt class="meta">{copy.department}</dt>
+      <dd class="mt-1 font-bold text-ink"><LangText value={data.department} /></dd>
+    </div>
+    <div>
+      <dt class="meta">{copy.location}</dt>
+      <dd class="mt-1 font-bold text-ink"><LangText value={data.location} /></dd>
+    </div>
+    <div>
+      <dt class="meta">{copy.engagement}</dt>
+      <dd class="mt-1 font-bold text-ink">{copy.engagementTypes[data.engagement]}</dd>
+    </div>
+  </dl>
+  <LangText value={data.description} as="p" class="mt-5 max-w-[68ch] text-ink-2" />
+  {
+    data.eligibility.length > 0 && (
+      <div class="mt-5">
+        <h4 class="meta">{copy.eligibility}</h4>
+        <ul class="mt-2 list-disc space-y-1 pl-5 text-ink-2 marker:text-ink-3">
+          {data.eligibility.map((item) => (
+            <LangText value={item} as="li" />
+          ))}
+        </ul>
+      </div>
+    )
+  }
+  <div class="mt-6 flex flex-wrap items-center gap-4">
+    <Button href={applyHref} icon="arrow-right">{copy.apply}</Button>
+    {data.deadline && <p class="text-sm text-ink-3">{fill(copy.deadline, { date: formatDate(data.deadline, locale) })}</p>}
+  </div>
+</article>

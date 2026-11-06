@@ -1,0 +1,130 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Leadership from '@/components/about/Leadership.astro';
+import OrgStructure from '@/components/about/OrgStructure.astro';
+import StorySections from '@/components/about/StorySections.astro';
+import LangText from '@/components/ui/LangText.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { localeStaticPaths } from '@/i18n';
+import { getStatements } from '@/utils/content';
+import { pageContext } from '@/utils/locale';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const { t, href } = pageContext(Astro.url);
+const copy = t.about;
+const { vision, mission, philosophy } = await getStatements();
+const sections = [
+  { id: 'vision-mission', label: copy.sections.visionMission },
+  { id: 'story', label: copy.sections.story },
+  { id: 'leadership', label: copy.sections.leadership },
+  { id: 'structure', label: copy.sections.structure },
+  { id: 'philosophy', label: copy.sections.philosophy },
+];
+---
+
+<BaseLayout
+  title={copy.seoTitle}
+  description={copy.seoDescription}
+  breadcrumbs={[
+    { name: t.nav.home, path: href('home') },
+    { name: t.nav.about, path: href('about') },
+  ]}
+>
+  <PageHeader
+    eyebrow={copy.header.eyebrow}
+    title={copy.header.title}
+    lead={copy.header.lead}
+    crumbs={[{ label: t.nav.about }]}
+    sections={sections}
+  />
+
+  <section id="vision-mission" class="section" aria-labelledby="vision-mission-title">
+    <div class="container-site">
+      <h2 id="vision-mission-title" class="sr-only">{copy.sections.visionMission}</h2>
+      <div class="grid gap-4 lg:grid-cols-2" data-reveal>
+        {
+          [
+            { label: copy.vision, text: vision },
+            { label: copy.mission, text: mission },
+          ].map((item, i) =>
+            item.text ? (
+              <article class="card flex flex-col p-8 lg:p-10">
+                <p class="eyebrow">
+                  <span class="eyebrow-index tabular">{`01.${i + 1}`}</span>
+                  <span>{item.label}</span>
+                </p>
+                <LangText value={item.text} as="p" class="mt-6 text-[1.5rem] leading-snug text-ink" />
+              </article>
+            ) : null,
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="story" class="section border-y border-line bg-surface" aria-labelledby="story-title">
+    <div class="container-site grid gap-10 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <SectionHeading id="story-title" index="02" eyebrow={copy.story.eyebrow} title={copy.story.title} />
+      </div>
+      <div class="lg:col-span-7 lg:col-start-6">
+        <StorySections />
+      </div>
+    </div>
+  </section>
+
+  <section id="leadership" class="section" aria-labelledby="leadership-title">
+    <div class="container-site">
+      <SectionHeading
+        id="leadership-title"
+        index="03"
+        eyebrow={copy.leadership.eyebrow}
+        title={copy.leadership.title}
+        lead={copy.leadership.lead}
+      />
+      <div class="mt-10">
+        <Leadership />
+      </div>
+    </div>
+  </section>
+
+  <section id="structure" class="section border-y border-line bg-surface" aria-labelledby="structure-title">
+    <div class="container-site">
+      <SectionHeading
+        id="structure-title"
+        index="04"
+        eyebrow={copy.structure.eyebrow}
+        title={copy.structure.title}
+        lead={copy.structure.lead}
+      />
+      <div class="mt-12">
+        <OrgStructure />
+      </div>
+    </div>
+  </section>
+
+  {
+    philosophy && (
+      <section id="philosophy" class="on-dark bg-navy-900" aria-labelledby="philosophy-title">
+        <div class="container-site py-20 lg:py-28">
+          <p class="eyebrow" id="philosophy-title">
+            <span class="eyebrow-index tabular">05</span>
+            <span>{copy.philosophy.eyebrow}</span>
+          </p>
+          <figure class="mt-8 max-w-4xl">
+            <span class="block h-0.5 w-10 bg-gold-400" aria-hidden="true" />
+            <LangText
+              value={philosophy}
+              as="blockquote"
+              class="mt-8 text-[clamp(1.75rem,1.3rem+1.8vw,2.75rem)] leading-[1.2] font-normal tracking-[-0.01em] text-on-dark"
+            />
+          </figure>
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>

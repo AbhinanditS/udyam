@@ -1,0 +1,85 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import LangText from '@/components/ui/LangText.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
+import { workAreaPath, type RouteKey } from '@/data/navigation';
+import { localeStaticPaths } from '@/i18n';
+import { getWorkAreas } from '@/utils/content';
+import { pageContext } from '@/utils/locale';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const { locale, t, href, path, alternate } = pageContext(Astro.url);
+const copy = t.sitemap;
+const workAreas = await getWorkAreas();
+const main: RouteKey[] = ['home', 'about', 'whatWeDo', 'impact', 'media', 'gallery', 'collaborations', 'research', 'testimonials', 'careers', 'contact', 'apps'];
+const legal: RouteKey[] = ['terms', 'privacy'];
+---
+
+<BaseLayout
+  title={copy.seoTitle}
+  description={copy.seoDescription}
+  breadcrumbs={[
+    { name: t.nav.home, path: href('home') },
+    { name: t.nav.sitemap, path: href('sitemap') },
+  ]}
+>
+  <PageHeader eyebrow={t.footer.legal} title={copy.title} lead={copy.lead} crumbs={[{ label: t.nav.sitemap }]} />
+
+  <section class="section" aria-label={copy.title}>
+    <div class="container-site grid gap-10 md:grid-cols-3">
+      <section aria-labelledby="sitemap-main">
+        <h2 id="sitemap-main" class="meta">{copy.main}</h2>
+        <ul class="mt-4 space-y-2.5">
+          {
+            main.map((route) => (
+              <li>
+                <a href={href(route)} class="link">
+                  {t.nav[route]}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+      <section aria-labelledby="sitemap-work">
+        <h2 id="sitemap-work" class="meta">{copy.workAreas}</h2>
+        <ul class="mt-4 space-y-2.5">
+          {
+            workAreas.map((area) => (
+              <li>
+                <a href={path(workAreaPath(area.id))} class="link">
+                  <LangText value={area.data.title} />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+      <section aria-labelledby="sitemap-more">
+        <h2 id="sitemap-more" class="meta">{copy.legal}</h2>
+        <ul class="mt-4 space-y-2.5">
+          {
+            legal.map((route) => (
+              <li>
+                <a href={href(route)} class="link">
+                  {t.nav[route]}
+                </a>
+              </li>
+            ))
+          }
+          <li>
+            <a href="/sitemap-index.xml" class="link">sitemap-index.xml</a>
+          </li>
+        </ul>
+        <p class="mt-8">
+          <a href={alternate(locale === 'en' ? 'hi' : 'en')} class="link font-bold" lang={locale === 'en' ? 'hi' : 'en'}>
+            {copy.otherLanguage}
+          </a>
+        </p>
+      </section>
+    </div>
+  </section>
+</BaseLayout>

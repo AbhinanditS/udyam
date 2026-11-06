@@ -1,0 +1,53 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Icon from '@/components/ui/Icon.astro';
+import TestimonialCard from './TestimonialCard.astro';
+import { fill } from '@/i18n';
+import { pageContext } from '@/utils/locale';
+
+interface Props {
+  items: CollectionEntry<'testimonials'>[];
+  id: string;
+}
+
+const { items, id } = Astro.props;
+const { t } = pageContext(Astro.url);
+---
+
+<div class="carousel" data-carousel>
+  <div class="mb-5 flex items-center justify-end gap-2" data-controls>
+    <span class="meta tabular mr-2" data-status data-template={t.testimonials.slide} aria-live="polite">
+      {fill(t.testimonials.slide, { current: 1, total: items.length })}
+    </span>
+    <button type="button" class="icon-btn" data-prev aria-controls={id}>
+      <Icon name="chevron-left" />
+      <span class="sr-only">{t.testimonials.previous}</span>
+    </button>
+    <button type="button" class="icon-btn" data-next aria-controls={id}>
+      <Icon name="chevron-right" />
+      <span class="sr-only">{t.testimonials.next}</span>
+    </button>
+  </div>
+  {/* eslint-disable astro/jsx-a11y/no-noninteractive-tabindex -- the scroll rail must be reachable by keyboard */}
+  <ul
+    id={id}
+    class="rail auto-cols-[minmax(17rem,88%)] sm:auto-cols-[minmax(20rem,60%)] lg:auto-cols-[calc((100%-2rem)/3)]"
+    data-rail
+    tabindex="0"
+    aria-label={t.testimonials.carouselLabel}
+  >
+{/* eslint-enable astro/jsx-a11y/no-noninteractive-tabindex */}
+    {
+      items.map((item, i) => (
+        <li aria-label={fill(t.testimonials.slide, { current: i + 1, total: items.length })}>
+          <TestimonialCard item={item} />
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<script>
+  import { initCarousels } from '@/scripts/carousel';
+  initCarousels();
+</script>

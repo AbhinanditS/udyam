@@ -1,0 +1,48 @@
+---
+/** A headline figure with a one-time count-up. The final value is always in the HTML. */
+import { fill, formatDate, formatNumber, localeMeta, pick } from '@/i18n';
+import type { Statistic } from '@/data/statistics';
+import { pageContext } from '@/utils/locale';
+
+interface Props {
+  stat: Statistic & { value: number };
+  tone?: 'light' | 'dark';
+  class?: string;
+}
+
+const { stat, tone = 'light', class: className } = Astro.props;
+const { locale, t } = pageContext(Astro.url);
+const label = pick(stat.label, locale);
+const display = `${stat.prefix ?? ''}${formatNumber(stat.value, locale)}${stat.suffix ?? ''}`;
+const asOf = stat.asOf ? fill(t.common.asOf, { date: formatDate(new Date(stat.asOf), locale) }) : null;
+---
+
+<div class:list={['flex flex-col-reverse', className]}>
+  <dt class="meta mt-3" lang={label.isFallback ? label.lang : undefined}>
+    {label.text}
+    {asOf && <span class="mt-1 block font-sans text-xs tracking-normal normal-case">{asOf}</span>}
+  </dt>
+  <dd>
+    <span class="block h-0.5 w-6 bg-gold-400" aria-hidden="true"></span>
+    <span
+      class:list={[
+        'tabular mt-4 block text-[clamp(2.5rem,1.9rem+2.4vw,3.5rem)] leading-none font-black tracking-[-0.02em]',
+        tone === 'dark' ? 'text-on-dark' : 'text-navy-900',
+      ]}
+    >
+      <span class="sr-only">{display}</span>
+      <span
+        aria-hidden="true"
+        data-counter={stat.value}
+        data-locale={localeMeta[locale].intl}
+        data-prefix={stat.prefix ?? ''}
+        data-suffix={stat.suffix ?? ''}>{display}</span
+      >
+    </span>
+  </dd>
+</div>
+
+<script>
+  import { initCounters } from '@/scripts/counters';
+  initCounters();
+</script>

@@ -1,0 +1,66 @@
+---
+/**
+ * Video that loads only when the visitor presses play (YouTube), or a local MP4 file.
+ * Nothing is requested from YouTube before the click.
+ */
+import type { ImageMetadata } from 'astro';
+import { Image, getImage } from 'astro:assets';
+import Icon from './Icon.astro';
+import { fill } from '@/i18n';
+import { pageContext } from '@/utils/locale';
+
+interface Props {
+  title: string;
+  youtubeId?: string | undefined;
+  videoFile?: string | undefined;
+  /** WebVTT captions for a local video, inside public/, for example /media/video.vtt */
+  captionsFile?: string | undefined;
+  poster?: ImageMetadata | undefined;
+  class?: string;
+}
+
+const { title, youtubeId, videoFile, captionsFile, poster, class: className } = Astro.props;
+const { locale, t } = pageContext(Astro.url);
+const posterUrl = poster && videoFile ? (await getImage({ src: poster, width: 1280 })).src : undefined;
+const label = fill(t.common.videoOf, { title });
+---
+
+{
+  youtubeId ? (
+    <div
+      class:list={['relative aspect-video overflow-hidden rounded-md bg-navy-950', className]}
+      data-youtube={youtubeId}
+      data-title={title}
+    >
+      {poster && <Image src={poster} alt="" width={1280} class="absolute inset-0 h-full w-full object-cover" loading="lazy" />}
+      <button
+        type="button"
+        class="group absolute inset-0 flex items-center justify-center bg-navy-950/30 transition-colors duration-[80ms] hover:bg-navy-950/40"
+      >
+        <span class="flex h-16 w-16 items-center justify-center rounded-full bg-white text-navy-900 shadow-md transition-transform duration-[90ms] group-active:scale-[0.97]">
+          <Icon name="play" size={26} class="translate-x-0.5" />
+        </span>
+        <span class="sr-only">
+          {t.common.playVideo}: {title}
+        </span>
+      </button>
+    </div>
+  ) : videoFile ? (
+    // eslint-disable-next-line astro/jsx-a11y/media-has-caption -- a captions track is added when captionsFile is supplied
+    <video
+      class:list={['aspect-video w-full rounded-md bg-navy-950', className]}
+      controls
+      preload="none"
+      poster={posterUrl}
+      aria-label={label}
+    >
+      <source src={videoFile} type="video/mp4" />
+      {captionsFile && <track kind="captions" src={captionsFile} srclang={locale} label={locale === 'hi' ? 'हिन्दी' : 'English'} />}
+    </video>
+  ) : null
+}
+
+<script>
+  import { initVideos } from '@/scripts/video';
+  initVideos();
+</script>

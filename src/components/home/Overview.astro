@@ -1,0 +1,56 @@
+---
+import { Image } from 'astro:assets';
+import Icon from '@/components/ui/Icon.astro';
+import { siteConfig } from '@/data/site-config';
+import { pickText } from '@/i18n';
+import { pageContext } from '@/utils/locale';
+import { sitePhotos } from '@/utils/photos';
+
+const { locale, t, href } = pageContext(Astro.url);
+const copy = t.home.overview;
+const photo = sitePhotos.overview;
+---
+
+<section id="overview" class="section border-t border-line bg-surface" aria-labelledby="overview-title">
+  <div class="container-site grid gap-12 lg:grid-cols-12 lg:gap-10">
+    <div class="lg:col-span-6">
+      <p class="eyebrow">{copy.eyebrow}</p>
+      <h2 id="overview-title" class="h2 mt-3 max-w-[20ch]">{copy.title}</h2>
+      <div class="measure mt-6 space-y-4 text-ink-2">
+        {copy.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+      <a href={href('about')} class="link-arrow mt-8">
+        {copy.link}
+        <Icon name="arrow-right" size={18} />
+      </a>
+    </div>
+
+    <div class="lg:col-span-5 lg:col-start-8" data-reveal>
+      {
+        photo && (
+          <Image
+            src={photo}
+            alt={pickText(siteConfig.photos.overview.alt, locale)}
+            width={960}
+            class="mb-8 aspect-[4/3] w-full rounded-md border border-line object-cover"
+            loading="lazy"
+          />
+        )
+      }
+      <h3 class="meta">{copy.pillarsTitle}</h3>
+      <ol class="mt-4 divide-y divide-line border-y border-line">
+        {
+          copy.pillars.map((pillar, i) => (
+            <li class="flex gap-5 py-5">
+              <span class="meta tabular pt-0.5 text-ink">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <h4 class="h4">{pillar.title}</h4>
+                <p class="mt-1 text-ink-2">{pillar.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>

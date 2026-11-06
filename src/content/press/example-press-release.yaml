@@ -1,0 +1,11 @@
+# Example entry. Add the article link (url) or a PDF in public/documents/press/ (file).
+status: draft
+type: press-release
+title:
+  en: '[Replace with the headline]'
+date: 2026-01-01
+# outlet: Name of the newspaper or website (for coverage and mentions)
+# summary:
+#   en: One-sentence summary
+# url: https://...
+# file: /documents/press/press-release.pdf

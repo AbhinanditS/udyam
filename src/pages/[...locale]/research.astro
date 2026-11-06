@@ -1,0 +1,169 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import TallyForm from '@/components/forms/TallyForm.astro';
+import PublicationCard from '@/components/media/PublicationCard.astro';
+import Button from '@/components/ui/Button.astro';
+import EditorialNote from '@/components/ui/EditorialNote.astro';
+import EmptyState from '@/components/ui/EmptyState.astro';
+import Icon, { type AnyIconName } from '@/components/ui/Icon.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { fill, localeStaticPaths } from '@/i18n';
+import { getPublishedPublications } from '@/utils/content';
+import { getDocument } from '@/utils/documents';
+import { pageContext } from '@/utils/locale';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const { t, href } = pageContext(Astro.url);
+const copy = t.research;
+const researchCategories = ['case-study', 'sop', 'policy-paper', 'research-report', 'impact-assessment', 'publication'] as const;
+const icons: Record<(typeof researchCategories)[number], AnyIconName> = {
+  'case-study': 'notebook-pen',
+  sop: 'clipboard-list',
+  'policy-paper': 'scroll-text',
+  'research-report': 'chart-column',
+  'impact-assessment': 'target',
+  publication: 'book-open',
+};
+const resources = (await getPublishedPublications([...researchCategories])).filter((item) => getDocument(item.data.file));
+const counts = Object.fromEntries(
+  researchCategories.map((category) => [category, resources.filter((item) => item.data.category === category).length]),
+) as Record<(typeof researchCategories)[number], number>;
+const presentCategories = researchCategories.filter((category) => counts[category] > 0);
+const sections = [
+  { id: 'categories', label: copy.sections.categories },
+  { id: 'library', label: copy.sections.library },
+  { id: 'submit-proposal', label: copy.sections.proposal },
+];
+---
+
+<BaseLayout
+  title={copy.seoTitle}
+  description={copy.seoDescription}
+  breadcrumbs={[
+    { name: t.nav.home, path: href('home') },
+    { name: t.nav.research, path: href('research') },
+  ]}
+>
+  <PageHeader
+    eyebrow={copy.header.eyebrow}
+    title={copy.header.title}
+    lead={copy.header.lead}
+    crumbs={[{ label: t.nav.research }]}
+    sections={sections}
+  >
+    <div class="mt-8 flex flex-wrap gap-3">
+      {
+        resources.length > 0 && (
+          <Button href="#library" icon="download" iconPosition="start">
+            {copy.downloadCta}
+          </Button>
+        )
+      }
+      <Button href="#submit-proposal" variant={resources.length > 0 ? 'secondary' : 'primary'} icon="arrow-right">
+        {copy.proposal.title}
+      </Button>
+    </div>
+  </PageHeader>
+
+  <section id="categories" class="section" aria-labelledby="categories-title">
+    <div class="container-site">
+      <SectionHeading id="categories-title" index="01" eyebrow={copy.categories.eyebrow} title={copy.categories.title} />
+      <ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-reveal>
+        {
+          researchCategories.map((category) => {
+            const item = copy.categories.items[category];
+            const count = counts[category];
+            return (
+              <li class:list={['card flex flex-col p-6', count > 0 && 'stretched-card card-interactive group']}>
+                <div class="flex items-start justify-between">
+                  <span class="icon-tile">
+                    <Icon name={icons[category]} />
+                  </span>
+                  <span class:list={['badge', count === 0 && 'badge-pending']}>
+                    {count > 0 ? fill(copy.categories.count, { count }) : copy.categories.none}
+                  </span>
+                </div>
+                <h3 class="h4 mt-5">
+                  {count > 0 ? (
+                    <a href="#library" class="stretched-link" data-filter-link={`library-grid:${category}`}>
+                      {item.title}
+                    </a>
+                  ) : (
+                    item.title
+                  )}
+                </h3>
+                <p class="mt-1.5 text-sm text-ink-2">{item.text}</p>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section id="library" class="section border-y border-line bg-surface" aria-labelledby="library-title">
+    <div class="container-site">
+      <SectionHeading id="library-title" index="02" eyebrow={copy.library.eyebrow} title={copy.library.title} />
+      <div class="mt-10">
+        {
+          resources.length > 0 ? (
+            <>
+              {presentCategories.length > 1 && (
+                <div role="group" aria-label={copy.library.filterLabel} data-filter-group="library-grid" hidden class="mb-6 flex flex-wrap gap-2">
+                  <button type="button" class="chip" aria-pressed="true" data-filter="all">
+                    {t.common.all}
+                  </button>
+                  {presentCategories.map((category) => (
+                    <button type="button" class="chip" aria-pressed="false" data-filter={category}>
+                      {copy.categories.items[category].title}
+                    </button>
+                  ))}
+                </div>
+              )}
+              <div>
+                <ul id="library-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {resources.map((item) => (
+                    <li data-category={item.data.category}>
+                      <PublicationCard item={item} />
+                    </li>
+                  ))}
+                </ul>
+                <p data-filter-empty hidden class="mt-6 text-ink-2">
+                  {copy.library.noneInCategory}
+                </p>
+              </div>
+            </>
+          ) : (
+            <EmptyState icon="library" title={copy.library.emptyTitle} text={copy.library.emptyText} tone="muted" />
+          )
+        }
+        <EditorialNote class="mt-6" file="src/content/publications/">
+          A resource is listed only with status: published and an existing PDF in public/documents/.
+        </EditorialNote>
+      </div>
+    </div>
+  </section>
+
+  <section id="submit-proposal" class="section" aria-labelledby="proposal-title">
+    <div class="container-site grid gap-10 lg:grid-cols-12">
+      <div class="lg:col-span-5">
+        <SectionHeading id="proposal-title" index="03" eyebrow={copy.proposal.eyebrow} title={copy.proposal.title} lead={copy.proposal.text} />
+      </div>
+      <div class="lg:col-span-7">
+        <div class="card p-6 sm:p-8">
+          <TallyForm form="research" height={640} />
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import { initFilterLinks, initFilters } from '@/scripts/filters';
+  initFilters();
+  initFilterLinks();
+</script>

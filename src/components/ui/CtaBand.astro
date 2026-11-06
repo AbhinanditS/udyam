@@ -1,0 +1,21 @@
+---
+interface Props {
+  title: string;
+  text?: string | undefined;
+  id?: string;
+}
+
+const { title, text, id = 'cta-title' } = Astro.props;
+---
+
+<section class="on-dark border-t border-line-dark bg-navy-900" aria-labelledby={id}>
+  <div class="container-site grid gap-8 py-16 lg:grid-cols-12 lg:items-center lg:py-20">
+    <div class="lg:col-span-7">
+      <h2 id={id} class="h2">{title}</h2>
+      {text && <p class="lead mt-4">{text}</p>}
+    </div>
+    <div class="flex flex-wrap gap-3 lg:col-span-5 lg:justify-end">
+      <slot />
+    </div>
+  </div>
+</section>

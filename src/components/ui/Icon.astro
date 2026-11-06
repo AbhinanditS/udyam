@@ -1,0 +1,146 @@
+---
+/**
+ * Renders a Lucide icon by name. Decorative by default (aria-hidden).
+ * Content files can use any name listed in src/data/icon-names.ts.
+ */
+import type { IconName } from '@/data/icon-names';
+import PresentationIcon from '@lucide/astro/icons/presentation';
+import UserCheckIcon from '@lucide/astro/icons/user-check';
+import SmartphoneIcon from '@lucide/astro/icons/smartphone';
+import BookOpenIcon from '@lucide/astro/icons/book-open';
+import HandshakeIcon from '@lucide/astro/icons/handshake';
+import FileSearchIcon from '@lucide/astro/icons/file-search';
+import AwardIcon from '@lucide/astro/icons/award';
+import UsersIcon from '@lucide/astro/icons/users';
+import BriefcaseBusinessIcon from '@lucide/astro/icons/briefcase-business';
+import LandmarkIcon from '@lucide/astro/icons/landmark';
+import BanknoteIcon from '@lucide/astro/icons/banknote';
+import HeartHandshakeIcon from '@lucide/astro/icons/heart-handshake';
+import GraduationCapIcon from '@lucide/astro/icons/graduation-cap';
+import NetworkIcon from '@lucide/astro/icons/network';
+import SchoolIcon from '@lucide/astro/icons/school';
+import BadgeCheckIcon from '@lucide/astro/icons/badge-check';
+import ClipboardListIcon from '@lucide/astro/icons/clipboard-list';
+import ChartColumnIcon from '@lucide/astro/icons/chart-column';
+import RouteIcon from '@lucide/astro/icons/route';
+import ScrollTextIcon from '@lucide/astro/icons/scroll-text';
+import FileTextIcon from '@lucide/astro/icons/file-text';
+import NewspaperIcon from '@lucide/astro/icons/newspaper';
+import LibraryIcon from '@lucide/astro/icons/library';
+import TargetIcon from '@lucide/astro/icons/target';
+import SearchIcon from '@lucide/astro/icons/search';
+import StoreIcon from '@lucide/astro/icons/store';
+import BuildingIcon from '@lucide/astro/icons/building';
+import CalendarIcon from '@lucide/astro/icons/calendar';
+import MapPinIcon from '@lucide/astro/icons/map-pin';
+import MailIcon from '@lucide/astro/icons/mail';
+import PhoneIcon from '@lucide/astro/icons/phone';
+import GlobeIcon from '@lucide/astro/icons/globe';
+import ImageIcon from '@lucide/astro/icons/image';
+import VideoIcon from '@lucide/astro/icons/video';
+import DownloadIcon from '@lucide/astro/icons/download';
+import QuoteIcon from '@lucide/astro/icons/quote';
+import InfoIcon from '@lucide/astro/icons/info';
+import LightbulbIcon from '@lucide/astro/icons/lightbulb';
+import NotebookPenIcon from '@lucide/astro/icons/notebook-pen';
+import LayersIcon from '@lucide/astro/icons/layers';
+import MessagesSquareIcon from '@lucide/astro/icons/messages-square';
+import ShieldCheckIcon from '@lucide/astro/icons/shield-check';
+import LogInIcon from '@lucide/astro/icons/log-in';
+import MonitorSmartphoneIcon from '@lucide/astro/icons/monitor-smartphone';
+import ArrowRightIcon from '@lucide/astro/icons/arrow-right';
+import ArrowUpRightIcon from '@lucide/astro/icons/arrow-up-right';
+import ArrowDownIcon from '@lucide/astro/icons/arrow-down';
+import ChevronDownIcon from '@lucide/astro/icons/chevron-down';
+import ChevronLeftIcon from '@lucide/astro/icons/chevron-left';
+import ChevronRightIcon from '@lucide/astro/icons/chevron-right';
+import MenuIcon from '@lucide/astro/icons/menu';
+import XIcon from '@lucide/astro/icons/x';
+import ExternalLinkIcon from '@lucide/astro/icons/external-link';
+import PlayIcon from '@lucide/astro/icons/play';
+import CircleCheckIcon from '@lucide/astro/icons/circle-check';
+import ClockIcon from '@lucide/astro/icons/clock';
+import LoaderCircleIcon from '@lucide/astro/icons/loader-circle';
+import MapIcon from '@lucide/astro/icons/map';
+import MegaphoneIcon from '@lucide/astro/icons/megaphone';
+
+const uiIcons = {
+  'arrow-right': ArrowRightIcon,
+  'arrow-up-right': ArrowUpRightIcon,
+  'arrow-down': ArrowDownIcon,
+  'chevron-down': ChevronDownIcon,
+  'chevron-left': ChevronLeftIcon,
+  'chevron-right': ChevronRightIcon,
+  'menu': MenuIcon,
+  'x': XIcon,
+  'external-link': ExternalLinkIcon,
+  'play': PlayIcon,
+  'circle-check': CircleCheckIcon,
+  'clock': ClockIcon,
+  'loader-circle': LoaderCircleIcon,
+  'map': MapIcon,
+  'megaphone': MegaphoneIcon,
+};
+
+const contentIcons: Record<IconName, typeof PresentationIcon> = {
+  'presentation': PresentationIcon,
+  'user-check': UserCheckIcon,
+  'smartphone': SmartphoneIcon,
+  'book-open': BookOpenIcon,
+  'handshake': HandshakeIcon,
+  'file-search': FileSearchIcon,
+  'award': AwardIcon,
+  'users': UsersIcon,
+  'briefcase-business': BriefcaseBusinessIcon,
+  'landmark': LandmarkIcon,
+  'banknote': BanknoteIcon,
+  'heart-handshake': HeartHandshakeIcon,
+  'graduation-cap': GraduationCapIcon,
+  'network': NetworkIcon,
+  'school': SchoolIcon,
+  'badge-check': BadgeCheckIcon,
+  'clipboard-list': ClipboardListIcon,
+  'chart-column': ChartColumnIcon,
+  'route': RouteIcon,
+  'scroll-text': ScrollTextIcon,
+  'file-text': FileTextIcon,
+  'newspaper': NewspaperIcon,
+  'library': LibraryIcon,
+  'target': TargetIcon,
+  'search': SearchIcon,
+  'store': StoreIcon,
+  'building': BuildingIcon,
+  'calendar': CalendarIcon,
+  'map-pin': MapPinIcon,
+  'mail': MailIcon,
+  'phone': PhoneIcon,
+  'globe': GlobeIcon,
+  'image': ImageIcon,
+  'video': VideoIcon,
+  'download': DownloadIcon,
+  'quote': QuoteIcon,
+  'info': InfoIcon,
+  'lightbulb': LightbulbIcon,
+  'notebook-pen': NotebookPenIcon,
+  'layers': LayersIcon,
+  'messages-square': MessagesSquareIcon,
+  'shield-check': ShieldCheckIcon,
+  'log-in': LogInIcon,
+  'monitor-smartphone': MonitorSmartphoneIcon,
+};
+
+export type AnyIconName = IconName | keyof typeof uiIcons;
+
+interface Props {
+  name: AnyIconName;
+  size?: number;
+  class?: string;
+  strokeWidth?: number;
+}
+
+const { name, size = 20, class: className, strokeWidth = 1.75 } = Astro.props;
+const icons: Record<string, typeof PresentationIcon> = { ...contentIcons, ...uiIcons };
+const Component = icons[name] ?? PresentationIcon;
+---
+
+<Component size={size} class={className} stroke-width={strokeWidth} aria-hidden="true" focusable="false" />

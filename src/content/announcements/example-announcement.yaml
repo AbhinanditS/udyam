@@ -1,0 +1,8 @@
+# Example entry. Published announcements appear in the strip above the home page hero.
+# The strip is hidden when there are no published announcements.
+status: draft
+text:
+  en: '[Replace with the announcement text]'
+# href: /media-events/
+# publishDate: 2026-01-01
+# expiryDate: 2026-02-01

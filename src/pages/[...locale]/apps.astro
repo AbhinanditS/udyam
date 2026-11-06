@@ -1,0 +1,106 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/ui/Button.astro';
+import EditorialNote from '@/components/ui/EditorialNote.astro';
+import Icon from '@/components/ui/Icon.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
+import { siteConfig } from '@/data/site-config';
+import { localeStaticPaths } from '@/i18n';
+import { pageContext } from '@/utils/locale';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const { t, href } = pageContext(Astro.url);
+const copy = t.apps;
+const apps = [
+  { id: 'trainer-app', icon: 'presentation' as const, ...copy.trainer, url: siteConfig.apps.trainerPlayStore, env: 'PUBLIC_TRAINER_APP_URL' },
+  { id: 'trainee-app', icon: 'smartphone' as const, ...copy.trainee, url: siteConfig.apps.traineePlayStore, env: 'PUBLIC_TRAINEE_APP_URL' },
+];
+const loginUrl = siteConfig.apps.login;
+---
+
+<BaseLayout
+  title={copy.seoTitle}
+  description={copy.seoDescription}
+  breadcrumbs={[
+    { name: t.nav.home, path: href('home') },
+    { name: t.nav.apps, path: href('apps') },
+  ]}
+>
+  <PageHeader eyebrow={copy.header.eyebrow} title={copy.header.title} lead={copy.header.lead} crumbs={[{ label: t.nav.apps }]} />
+
+  <section class="section" aria-label={copy.header.title}>
+    <div class="container-site space-y-6">
+      <div class="grid gap-6 md:grid-cols-2">
+        {
+          apps.map((app) => (
+            <article id={app.id} class="card flex scroll-mt-28 flex-col p-6 sm:p-8" aria-labelledby={`${app.id}-title`}>
+              <div class="flex items-start justify-between gap-4">
+                <span class="icon-tile h-12 w-12">
+                  <Icon name={app.icon} size={24} />
+                </span>
+                {app.url ? (
+                  <span class="badge badge-verified badge-dot">Google Play</span>
+                ) : (
+                  <span class="badge badge-pending">{t.common.comingSoon}</span>
+                )}
+              </div>
+              <h2 id={`${app.id}-title`} class="h2 mt-6">
+                {app.title}
+              </h2>
+              <p class="mt-2 text-ink-2">{app.text}</p>
+              <h3 class="meta mt-6">{copy.featuresLabel}</h3>
+              <ul class="mt-3 flex-1 space-y-2.5">
+                {app.features.map((feature) => (
+                  <li class="flex gap-3 text-ink">
+                    <Icon name="circle-check" size={18} class="mt-0.5 shrink-0 text-green-600" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <div class="mt-8 border-t border-line pt-6">
+                {app.url ? (
+                  <Button href={app.url} icon="arrow-up-right">
+                    {copy.playStore}
+                  </Button>
+                ) : (
+                  <>
+                    <p class="font-bold text-ink-2">{copy.playStoreSoon}</p>
+                    <EditorialNote class="mt-3" file={`.env or Cloudflare Pages: ${app.env}`}>
+                      Add the Google Play listing URL to show the download button.
+                    </EditorialNote>
+                  </>
+                )}
+              </div>
+            </article>
+          ))
+        }
+      </div>
+
+      <article id="login" class="panel-muted flex scroll-mt-28 flex-col gap-6 p-6 sm:p-8 md:flex-row md:items-center md:justify-between" aria-labelledby="login-title">
+        <div class="flex gap-4">
+          <span class="icon-tile">
+            <Icon name="log-in" />
+          </span>
+          <div>
+            <h2 id="login-title" class="h3">{copy.login.title}</h2>
+            <p class="mt-1 text-ink-2">{loginUrl ? copy.login.text : copy.login.unavailable}</p>
+          </div>
+        </div>
+        {
+          loginUrl ? (
+            <Button href={loginUrl} icon="arrow-up-right" class="shrink-0">
+              {copy.login.button}
+            </Button>
+          ) : (
+            <EditorialNote file=".env or Cloudflare Pages: PUBLIC_APP_LOGIN_URL">
+              Add the web login address of the existing Trainer or Trainee application to activate Login.
+            </EditorialNote>
+          )
+        }
+      </article>
+    </div>
+  </section>
+</BaseLayout>

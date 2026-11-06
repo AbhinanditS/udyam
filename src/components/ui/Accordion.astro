@@ -1,0 +1,32 @@
+---
+/** Accessible accordion built on native details and summary elements. */
+import Icon from './Icon.astro';
+
+interface Props {
+  items: { id: string; title: string; text: string }[];
+  /** Index of the item that starts open. */
+  openIndex?: number;
+  headingLevel?: 'h3' | 'h4';
+}
+
+const { items, openIndex = 0, headingLevel: Heading = 'h3' } = Astro.props;
+---
+
+<div class="divide-y divide-line overflow-hidden rounded-md border border-line bg-surface shadow-xs">
+  {
+    items.map((item, i) => (
+      <details class="accordion-item group" id={item.id} open={i === openIndex}>
+        <summary class="flex min-h-16 items-center justify-between gap-6 px-6 py-5 transition-colors duration-[80ms] hover:bg-navy-50">
+          <Heading class="h4 flex items-baseline gap-4">
+            <span class="meta tabular text-ink-3">{String(i + 1).padStart(2, '0')}</span>
+            <span>{item.title}</span>
+          </Heading>
+          <Icon name="chevron-down" size={20} class="accordion-chevron shrink-0 text-ink-3" />
+        </summary>
+        <div class="px-6 pb-6 sm:pl-[4.25rem]">
+          <p class="max-w-[64ch] text-ink-2">{item.text}</p>
+        </div>
+      </details>
+    ))
+  }
+</div>

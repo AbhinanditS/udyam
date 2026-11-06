@@ -1,0 +1,255 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import Logo from '@/components/ui/Logo.astro';
+import LangText from '@/components/ui/LangText.astro';
+import SocialLinks from '@/components/ui/SocialLinks.astro';
+import LanguageSwitch from './LanguageSwitch.astro';
+import { primaryNav, routes, workAreaPath, type RouteKey } from '@/data/navigation';
+import { siteConfig } from '@/data/site-config';
+import { activeSocialLinks } from '@/data/social-links';
+import { stripLocale, type Locale } from '@/i18n';
+import { getWorkAreas } from '@/utils/content';
+import { pageContext } from '@/utils/locale';
+
+interface Props {
+  alternatePaths?: Partial<Record<Locale, string>> | undefined;
+}
+
+const { alternatePaths } = Astro.props;
+const { t, href, path } = pageContext(Astro.url);
+const currentPath = stripLocale(Astro.url.pathname);
+const workAreas = await getWorkAreas();
+const loginUrl = siteConfig.apps.login;
+
+const isCurrent = (route: RouteKey) => routes[route] === currentPath;
+const inSection = (route: RouteKey) =>
+  route !== 'home' && currentPath !== routes[route] && currentPath.startsWith(routes[route]);
+---
+
+<a href="#main" class="skip-link">{t.common.skipToContent}</a>
+
+<div class="on-dark bg-navy-950 text-[0.8125rem]">
+  <div class="container-site flex h-10 items-center justify-between gap-4">
+    {
+      activeSocialLinks.length > 0 ? (
+        <SocialLinks tone="dark" size="sm" class="-ml-2 hidden sm:flex" />
+      ) : (
+        <p class="hidden truncate text-on-dark-3 sm:block" aria-hidden="true">{t.brand.tagline}</p>
+      )
+    }
+    <nav aria-label={t.header.utilityNav} class="ml-auto flex items-center gap-1">
+      <a href={href('contact')} class="utility-link">
+        {t.header.contact}
+      </a>
+      {
+        loginUrl ? (
+          <a href={loginUrl} class="utility-link" target="_blank" rel="noopener noreferrer">
+            <Icon name="log-in" size={15} />
+            {t.header.login}
+            <span class="sr-only">{t.common.opensInNewTab}</span>
+          </a>
+        ) : (
+          <a href={href('apps', 'login')} class="utility-link" aria-label={t.header.loginSoonLabel}>
+            <Icon name="log-in" size={15} />
+            {t.header.login}
+            <span class="badge min-h-0 py-0 text-[0.625rem]">{t.header.loginSoonBadge}</span>
+          </a>
+        )
+      }
+      <span class="mx-1.5 h-4 w-px bg-line-dark-strong" aria-hidden="true"></span>
+      <LanguageSwitch tone="dark" alternatePaths={alternatePaths} />
+    </nav>
+  </div>
+</div>
+
+<div data-header-sentinel aria-hidden="true" class="h-px -mb-px"></div>
+
+<header class="site-header sticky top-0 z-40 border-b border-line bg-surface" data-site-header>
+  <div class="container-site header-row flex items-center gap-6">
+    <Logo />
+
+    <nav aria-label={t.header.primaryNav} class="ml-auto hidden xl:block">
+      <ul class="flex items-center gap-0.5">
+        {
+          primaryNav.map((item) => (
+            <li>
+              {item.hasWorkAreasMenu ? (
+                <div class="flex items-center">
+                  <a
+                    href={href(item.route)}
+                    class="nav-link pr-1"
+                    aria-current={isCurrent(item.route) ? 'page' : undefined}
+                    data-section-current={inSection(item.route) ? '' : undefined}
+                  >
+                    {t.nav[item.shortLabel ?? item.label]}
+                  </a>
+                  <button
+                    type="button"
+                    class="group inline-flex h-8 w-7 items-center justify-center rounded-sm text-ink-3 transition-[background-color,color,transform] duration-[80ms] hover:bg-navy-50 hover:text-ink active:scale-[0.97]"
+                    aria-expanded="false"
+                    aria-controls="work-areas-menu"
+                    data-menu-toggle
+                  >
+                    <Icon
+                      name="chevron-down"
+                      size={16}
+                      class="transition-transform duration-150 group-aria-expanded:rotate-180"
+                    />
+                    <span class="sr-only">{t.header.workAreasToggle}</span>
+                  </button>
+                </div>
+              ) : (
+                <a
+                  href={href(item.route)}
+                  class="nav-link"
+                  aria-current={isCurrent(item.route) ? 'page' : undefined}
+                  data-section-current={inSection(item.route) ? '' : undefined}
+                >
+                  {t.nav[item.shortLabel ?? item.label]}
+                </a>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm ml-auto xl:hidden"
+      aria-haspopup="dialog"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+      data-drawer-open
+    >
+      <Icon name="menu" size={18} />
+      <span>{t.header.menu}</span>
+    </button>
+  </div>
+
+  <div id="work-areas-menu" class="menu-panel absolute inset-x-0 top-full hidden xl:block" hidden>
+    <div class="container-site">
+      <div class="card mt-2 grid gap-8 p-6 shadow-md lg:grid-cols-12">
+        <div class="lg:col-span-3 lg:border-r lg:border-line lg:pr-6">
+          <p class="eyebrow">{t.header.workAreasMenu}</p>
+          <p class="mt-3 text-sm text-ink-2">{t.whatWeDo.header.lead}</p>
+          <a href={href('whatWeDo')} class="link-arrow mt-5 text-sm">
+            {t.header.allWorkAreas}
+            <Icon name="arrow-right" size={16} />
+          </a>
+        </div>
+        <ul class="grid gap-1 lg:col-span-9 lg:grid-cols-3">
+          {
+            workAreas.map((area) => (
+              <li>
+                <a
+                  href={path(workAreaPath(area.id))}
+                  class="flex gap-3 rounded-sm p-3 transition-colors duration-[80ms] hover:bg-navy-50"
+                  aria-current={currentPath === workAreaPath(area.id) ? 'page' : undefined}
+                >
+                  <span class="icon-tile h-9 w-9">
+                    <Icon name={area.data.icon} size={18} />
+                  </span>
+                  <span class="min-w-0">
+                    <LangText value={area.data.title} class="block text-[0.9375rem] leading-snug font-bold text-ink" />
+                    <LangText value={area.data.summary} class="mt-1 line-clamp-2 block text-sm leading-snug text-ink-3" />
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
+
+<dialog id="mobile-nav" class="drawer" aria-label={t.header.menu} data-drawer>
+  <div class="flex h-full flex-col">
+    <div class="flex items-center justify-between gap-4 border-b border-line px-4 py-3">
+      <Logo showTagline={false} />
+      <button type="button" class="icon-btn" data-drawer-close>
+        <Icon name="x" />
+        <span class="sr-only">{t.header.closeMenu}</span>
+      </button>
+    </div>
+
+    <nav aria-label={t.header.primaryNav} class="flex-1 overflow-y-auto px-3 py-4">
+      <ul class="space-y-0.5">
+        {
+          primaryNav.map((item) =>
+            item.hasWorkAreasMenu ? (
+              <li>
+                <details class="accordion-item" open={inSection(item.route) || isCurrent(item.route)}>
+                  <summary class="drawer-link">
+                    <span>{t.nav[item.label]}</span>
+                    <Icon name="chevron-down" size={18} class="accordion-chevron text-ink-3" />
+                  </summary>
+                  <ul class="mt-1 mb-2 ml-4 border-l border-line pl-3">
+                    <li>
+                      <a
+                        href={href(item.route)}
+                        class="block rounded-sm px-2 py-2 text-sm font-bold text-ink hover:bg-navy-50"
+                        aria-current={isCurrent(item.route) ? 'page' : undefined}
+                      >
+                        {t.header.allWorkAreas}
+                      </a>
+                    </li>
+                    {workAreas.map((area) => (
+                      <li>
+                        <a
+                          href={path(workAreaPath(area.id))}
+                          class="block rounded-sm px-2 py-2 text-sm text-ink-2 hover:bg-navy-50 hover:text-ink aria-[current=page]:font-bold aria-[current=page]:text-ink"
+                          aria-current={currentPath === workAreaPath(area.id) ? 'page' : undefined}
+                        >
+                          <LangText value={area.data.title} />
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              </li>
+            ) : (
+              <li>
+                <a
+                  href={href(item.route)}
+                  class="drawer-link"
+                  aria-current={isCurrent(item.route) || inSection(item.route) ? 'page' : undefined}
+                >
+                  {t.nav[item.label]}
+                </a>
+              </li>
+            ),
+          )
+        }
+      </ul>
+    </nav>
+
+    <div class="space-y-4 border-t border-line px-4 py-4">
+      {
+        loginUrl ? (
+          <a href={loginUrl} class="btn btn-primary w-full" target="_blank" rel="noopener noreferrer">
+            <Icon name="log-in" size={18} />
+            <span>{t.header.login}</span>
+            <span class="sr-only">{t.common.opensInNewTab}</span>
+          </a>
+        ) : (
+          <a href={href('apps', 'login')} class="btn btn-secondary w-full" aria-label={t.header.loginSoonLabel}>
+            <Icon name="log-in" size={18} />
+            <span>{t.header.login}</span>
+            <span class="badge">{t.header.loginSoonBadge}</span>
+          </a>
+        )
+      }
+      <div class="flex items-center justify-between gap-4">
+        <LanguageSwitch alternatePaths={alternatePaths} />
+        <SocialLinks size="sm" />
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  import { initHeader } from '@/scripts/header';
+  initHeader();
+</script>

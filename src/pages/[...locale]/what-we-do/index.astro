@@ -1,0 +1,42 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import WorkAreaGrid from '@/components/sections/WorkAreaGrid.astro';
+import Button from '@/components/ui/Button.astro';
+import CtaBand from '@/components/ui/CtaBand.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
+import { localeStaticPaths } from '@/i18n';
+import { pageContext } from '@/utils/locale';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const { t, href } = pageContext(Astro.url);
+const copy = t.whatWeDo;
+---
+
+<BaseLayout
+  title={copy.seoTitle}
+  description={copy.seoDescription}
+  breadcrumbs={[
+    { name: t.nav.home, path: href('home') },
+    { name: t.nav.whatWeDo, path: href('whatWeDo') },
+  ]}
+>
+  <PageHeader eyebrow={copy.header.eyebrow} title={copy.header.title} lead={copy.header.lead} crumbs={[{ label: t.nav.whatWeDo }]} />
+
+  <section class="section bg-band" aria-label={copy.gridLabel}>
+    <div class="container-site">
+      <WorkAreaGrid headingLevel="h2" label={copy.gridLabel} />
+    </div>
+  </section>
+
+  <CtaBand title={copy.cta.title} text={copy.cta.text}>
+    <Button href={href('collaborations', 'partner-with-us')} variant="gold" icon="arrow-right">
+      {copy.cta.partner}
+    </Button>
+    <Button href={href('contact')} variant="on-dark">
+      {copy.cta.contact}
+    </Button>
+  </CtaBand>
+</BaseLayout>

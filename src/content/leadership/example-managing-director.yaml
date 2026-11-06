@@ -1,0 +1,18 @@
+# Example entry. Copy it for each leader, rename the copy (for example full-name.yaml), replace every
+# "[Replace ...]" value and set status: published. Put the photograph next to the file.
+# Suggested message direction from the brief: "Building rural excellence through skilling and innovation."
+status: draft
+tier: managing-director
+order: 1
+name: '[Replace with full name]'
+designation:
+  en: Managing Director
+  hi: प्रबंध निदेशक
+message:
+  en: '[Replace with the approved message from the Managing Director.]'
+bio:
+  en: '[Replace with a short, verified biography.]'
+# photo: ./full-name.jpg
+# photoAlt:
+#   en: Portrait of the Managing Director
+# linkedin: https://www.linkedin.com/in/...

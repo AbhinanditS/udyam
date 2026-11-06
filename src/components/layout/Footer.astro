@@ -1,0 +1,170 @@
+---
+import { Image } from 'astro:assets';
+import Icon from '@/components/ui/Icon.astro';
+import Logo from '@/components/ui/Logo.astro';
+import LangText from '@/components/ui/LangText.astro';
+import SocialLinks from '@/components/ui/SocialLinks.astro';
+import TallyPopupLink from '@/components/forms/TallyPopupLink.astro';
+import LanguageSwitch from './LanguageSwitch.astro';
+import { footerLegalLinks, footerQuickLinks, workAreaPath } from '@/data/navigation';
+import { siteConfig } from '@/data/site-config';
+import { pick, type Locale } from '@/i18n';
+import { getDisplayablePartnerLogos, getWorkAreas } from '@/utils/content';
+import { pageContext } from '@/utils/locale';
+import { telHref } from '@/utils/urls';
+
+interface Props {
+  alternatePaths?: Partial<Record<Locale, string>> | undefined;
+}
+
+const { alternatePaths } = Astro.props;
+const { locale, t, href, path } = pageContext(Astro.url);
+const workAreas = await getWorkAreas();
+const partnerLogos = await getDisplayablePartnerLogos();
+const { email, phone, address } = siteConfig.contact;
+const addressText = address.en ? pick(address, locale) : null;
+const buildYear = new Date().getFullYear();
+---
+
+<footer class="on-dark mt-auto bg-navy-950" aria-labelledby="footer-heading">
+  <h2 id="footer-heading" class="sr-only">{t.brand.fullName}</h2>
+  <div class="container-site py-16 lg:py-20">
+    <div class="grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-3">
+        <Logo tone="dark" />
+        <p class="mt-6 max-w-sm text-on-dark-2">{t.footer.description}</p>
+        {
+          (email || phone || addressText) && (
+            <ul class="mt-6 space-y-2 text-sm">
+              {addressText && (
+                <li class="flex gap-2.5" lang={addressText.lang}>
+                  <Icon name="map-pin" size={16} class="mt-0.5 shrink-0 text-on-dark-3" />
+                  <span>{addressText.text}</span>
+                </li>
+              )}
+              {email && (
+                <li class="flex gap-2.5">
+                  <Icon name="mail" size={16} class="mt-0.5 shrink-0 text-on-dark-3" />
+                  <a href={`mailto:${email}`} class="link">
+                    {email}
+                  </a>
+                </li>
+              )}
+              {phone && (
+                <li class="flex gap-2.5">
+                  <Icon name="phone" size={16} class="mt-0.5 shrink-0 text-on-dark-3" />
+                  <a href={telHref(phone)} class="link">
+                    {phone}
+                  </a>
+                </li>
+              )}
+            </ul>
+          )
+        }
+        <SocialLinks tone="dark" class="mt-6 -ml-2.5" />
+      </div>
+
+      <div class="grid gap-10 sm:grid-cols-3 lg:col-span-6 lg:gap-8">
+        <nav aria-labelledby="footer-quick-links">
+          <h3 id="footer-quick-links" class="meta">{t.footer.quickLinks}</h3>
+          <ul class="mt-4 space-y-2.5 text-sm">
+            {
+              footerQuickLinks.map((link) => (
+                <li>
+                  <a href={href(link.route)} class="footer-link">
+                    {t.nav[link.label]}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <nav aria-labelledby="footer-work-areas">
+          <h3 id="footer-work-areas" class="meta">{t.footer.workAreas}</h3>
+          <ul class="mt-4 space-y-2.5 text-sm">
+            {
+              workAreas.map((area) => (
+                <li>
+                  <a href={path(workAreaPath(area.id))} class="footer-link">
+                    <LangText value={area.data.title} />
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <nav aria-labelledby="footer-legal">
+          <h3 id="footer-legal" class="meta">{t.footer.legal}</h3>
+          <ul class="mt-4 space-y-2.5 text-sm">
+            {
+              footerLegalLinks.map((link) => (
+                <li>
+                  <a href={href(link.route)} class="footer-link">
+                    {t.nav[link.label]}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+
+      <div class="lg:col-span-3">
+        <div class="rounded-md border border-line-dark p-6">
+          <h3 class="h4">{t.footer.newsletterTitle}</h3>
+          <p class="mt-2 text-sm text-on-dark-2">{t.footer.newsletterText}</p>
+          <TallyPopupLink
+            form="newsletter"
+            label={t.footer.newsletterButton}
+            unavailable={t.footer.newsletterUnavailable}
+            thanks={t.footer.newsletterThanks}
+            class="mt-5"
+          />
+        </div>
+      </div>
+    </div>
+
+    {
+      partnerLogos.length > 0 && (
+        <div class="mt-16 border-t border-line-dark pt-10">
+          <h3 class="meta">{t.footer.partners}</h3>
+          <ul class="mt-6 flex flex-wrap items-center gap-3">
+            {partnerLogos.map((partner) =>
+              partner.data.logo ? (
+                <li class="flex h-16 w-36 items-center justify-center rounded-sm bg-white p-3">
+                  <Image
+                    src={partner.data.logo}
+                    alt={partner.data.name}
+                    width={240}
+                    class="max-h-10 w-auto object-contain"
+                    loading="lazy"
+                  />
+                </li>
+              ) : null,
+            )}
+          </ul>
+        </div>
+      )
+    }
+  </div>
+
+  <div class="border-t border-line-dark">
+    <div
+      class="container-site flex flex-col gap-3 py-6 text-sm text-on-dark-3 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p>
+        © <span data-current-year>{buildYear}</span>
+        <span lang="en">UdyamSetu Pvt. Ltd.</span>
+        {t.footer.rights}
+      </p>
+      <LanguageSwitch tone="dark" alternatePaths={alternatePaths} />
+    </div>
+  </div>
+</footer>
+
+<script is:inline>
+  // Keeps the copyright year current even if the site has not been rebuilt this year.
+  document.querySelectorAll('[data-current-year]').forEach(function (el) {
+    el.textContent = String(new Date().getFullYear());
+  });
+</script>

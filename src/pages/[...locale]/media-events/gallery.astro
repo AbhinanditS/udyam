@@ -1,0 +1,51 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import GalleryGrid from '@/components/media/GalleryGrid.astro';
+import EmptyState from '@/components/ui/EmptyState.astro';
+import Icon from '@/components/ui/Icon.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
+import { localeStaticPaths } from '@/i18n';
+import { getPublishedGallery } from '@/utils/content';
+import { pageContext } from '@/utils/locale';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const { t, href } = pageContext(Astro.url);
+const copy = t.media.galleryPage;
+const items = await getPublishedGallery();
+---
+
+<BaseLayout
+  title={copy.seoTitle}
+  description={copy.seoDescription}
+  breadcrumbs={[
+    { name: t.nav.home, path: href('home') },
+    { name: t.nav.media, path: href('media') },
+    { name: copy.title, path: href('gallery') },
+  ]}
+>
+  <PageHeader
+    eyebrow={copy.eyebrow}
+    title={copy.title}
+    lead={copy.lead}
+    crumbs={[{ label: t.nav.media, href: href('media') }, { label: copy.title }]}
+  />
+
+  <section class="section" aria-label={copy.title}>
+    <div class="container-site">
+      {
+        items.length > 0 ? (
+          <GalleryGrid items={items} id="media-all" showFilters />
+        ) : (
+          <EmptyState icon="image" title={t.media.gallery.emptyTitle} text={t.media.gallery.emptyText} headingLevel="h2" />
+        )
+      }
+      <a href={href('media')} class="link-arrow mt-10">
+        <Icon name="arrow-right" size={18} class="rotate-180" />
+        {copy.back}
+      </a>
+    </div>
+  </section>
+</BaseLayout>

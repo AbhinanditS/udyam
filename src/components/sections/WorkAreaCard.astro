@@ -1,0 +1,37 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Icon from '@/components/ui/Icon.astro';
+import LangText from '@/components/ui/LangText.astro';
+import { workAreaPath } from '@/data/navigation';
+import { pick } from '@/i18n';
+import { pageContext } from '@/utils/locale';
+
+interface Props {
+  area: CollectionEntry<'workAreas'>;
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { area, headingLevel: Heading = 'h3' } = Astro.props;
+const { locale, t, path } = pageContext(Astro.url);
+const fallback = pick(area.data.title, locale).isFallback;
+---
+
+<article class="stretched-card card card-interactive group flex h-full flex-col p-6">
+  <div class="flex items-start justify-between">
+    <span class="icon-tile h-11 w-11">
+      <Icon name={area.data.icon} size={22} />
+    </span>
+    <span class="meta tabular">{String(area.data.order).padStart(2, '0')}</span>
+  </div>
+  <Heading class="h3 mt-6">
+    <a href={path(workAreaPath(area.id))} class="stretched-link">
+      <LangText value={area.data.title} />
+    </a>
+  </Heading>
+  <LangText value={area.data.summary} as="p" class="mt-2 flex-1 text-ink-2" />
+  <span class="link-arrow mt-6 text-sm" aria-hidden="true">
+    {t.common.learnMore}
+    <Icon name="arrow-right" size={16} />
+  </span>
+  {fallback && <span class="badge mt-4 self-start">{t.common.englishOnly}</span>}
+</article>

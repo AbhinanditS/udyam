@@ -1,0 +1,67 @@
+---
+/** Restrained announcement strip. Hidden when there are no published announcements. */
+import Icon from '@/components/ui/Icon.astro';
+import LangText from '@/components/ui/LangText.astro';
+import { fill } from '@/i18n';
+import { getActiveAnnouncements } from '@/utils/content';
+import { pageContext } from '@/utils/locale';
+import { isExternal } from '@/utils/urls';
+
+const { t, path } = pageContext(Astro.url);
+const announcements = await getActiveAnnouncements();
+---
+
+{
+  announcements.length > 0 && (
+    <section class="border-b border-line bg-navy-50" aria-label={t.announcements.label} data-ticker>
+      <div class="container-site flex min-h-12 items-center gap-3 py-2 text-sm">
+        <span class="badge shrink-0">
+          <Icon name="megaphone" size={13} />
+          <span class="hidden sm:inline">{t.announcements.label}</span>
+        </span>
+        <ul class="ticker-list min-w-0 flex-1">
+          {announcements.map((item) => (
+            <li data-ticker-item class="truncate">
+              {item.data.href ? (
+                <a
+                  href={isExternal(item.data.href) ? item.data.href : path(item.data.href)}
+                  class="link font-bold text-ink"
+                  target={isExternal(item.data.href) ? '_blank' : undefined}
+                  rel={isExternal(item.data.href) ? 'noopener noreferrer' : undefined}
+                >
+                  <LangText value={item.data.text} />
+                  {isExternal(item.data.href) && <span class="sr-only">{t.common.opensInNewTab}</span>}
+                </a>
+              ) : (
+                <LangText value={item.data.text} class="font-bold text-ink" />
+              )}
+            </li>
+          ))}
+        </ul>
+        <div data-ticker-controls hidden class="flex shrink-0 items-center gap-1">
+          <button type="button" class="icon-btn h-8 w-8" data-ticker-prev>
+            <Icon name="chevron-left" size={16} />
+            <span class="sr-only">{t.announcements.previous}</span>
+          </button>
+          <span
+            class="meta tabular min-w-10 text-center"
+            data-ticker-status
+            data-template={t.announcements.position}
+            aria-live="polite"
+          >
+            {fill(t.announcements.position, { current: 1, total: announcements.length })}
+          </span>
+          <button type="button" class="icon-btn h-8 w-8" data-ticker-next>
+            <Icon name="chevron-right" size={16} />
+            <span class="sr-only">{t.announcements.next}</span>
+          </button>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<script>
+  import { initTickers } from '@/scripts/ticker';
+  initTickers();
+</script>

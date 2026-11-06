@@ -1,0 +1,122 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Image, getImage } from 'astro:assets';
+import Icon from '@/components/ui/Icon.astro';
+import { fill, formatDate, pickText } from '@/i18n';
+import { pageContext } from '@/utils/locale';
+
+interface Props {
+  items: CollectionEntry<'gallery'>[];
+  id: string;
+  showFilters?: boolean;
+}
+
+const { items, id, showFilters = false } = Astro.props;
+const { locale, t } = pageContext(Astro.url);
+const copy = t.media.gallery;
+const categories = [...new Set(items.map((item) => item.data.category))];
+const dialogId = `${id}-viewer`;
+const full = await Promise.all(
+  items.map((item) =>
+    item.data.image ? getImage({ src: item.data.image, widths: [960, 1600, 2400], width: 2400 }) : Promise.resolve(null),
+  ),
+);
+---
+
+{
+  showFilters && categories.length > 1 && (
+    <div role="group" aria-label={copy.filterLabel} data-filter-group={id} hidden class="mb-6 flex flex-wrap gap-2">
+      <button type="button" class="chip" aria-pressed="true" data-filter="all">
+        {t.common.all}
+      </button>
+      {categories.map((category) => (
+        <button type="button" class="chip" aria-pressed="false" data-filter={category}>
+          {copy.categories[category]}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+<ul id={id} class="grid grid-cols-2 gap-x-3 gap-y-6 md:grid-cols-3" data-gallery={dialogId}>
+  {
+    items.map((item, i) => {
+      const title = pickText(item.data.title, locale);
+      const image = full[i];
+      return (
+        <li data-category={item.data.category}>
+          <button
+            type="button"
+            class="group relative block aspect-[4/3] w-full overflow-hidden rounded-md border border-line bg-navy-50"
+            data-media
+            data-type={item.data.type}
+            data-src={image?.src}
+            data-srcset={image?.srcSet.attribute}
+            data-alt={pickText(item.data.alt, locale)}
+            data-title={title}
+            data-caption={pickText(item.data.caption, locale)}
+            data-youtube={item.data.youtubeId}
+            data-video={item.data.videoFile}
+          >
+            {item.data.image && (
+              <Image
+                src={item.data.image}
+                alt=""
+                widths={[480, 800]}
+                sizes="(min-width: 768px) 33vw, 50vw"
+                class="h-full w-full object-cover"
+                loading="lazy"
+              />
+            )}
+            <span class="absolute inset-0 bg-navy-950/0 transition-colors duration-[80ms] group-hover:bg-navy-950/15" />
+            {item.data.type === 'video' && (
+              <span class="absolute inset-0 flex items-center justify-center">
+                <span class="flex h-12 w-12 items-center justify-center rounded-full bg-white/95 text-navy-900 shadow-md">
+                  <Icon name="play" size={20} class="translate-x-px" />
+                </span>
+              </span>
+            )}
+            <span class="sr-only">{fill(copy.openItem, { title })}</span>
+          </button>
+          <p class="mt-2.5 text-sm font-bold text-ink">{title}</p>
+          <p class="meta mt-1">
+            {copy.categories[item.data.category]}
+            {item.data.date && <> · {formatDate(item.data.date, locale, { month: 'short', year: 'numeric' })}</>}
+          </p>
+        </li>
+      );
+    })
+  }
+</ul>
+<p data-filter-empty hidden class="mt-6 text-ink-2">{copy.emptyTitle}</p>
+
+<dialog id={dialogId} class="lightbox on-dark" aria-label={copy.lightboxLabel}>
+  <div class="flex h-full flex-col">
+    <div class="flex items-center justify-between gap-4 p-4">
+      <span data-status class="meta tabular" aria-live="polite"></span>
+      <button type="button" class="icon-btn" data-close>
+        <Icon name="x" />
+        <span class="sr-only">{t.common.close}</span>
+      </button>
+    </div>
+    <div class="relative flex min-h-0 flex-1 items-center justify-center px-4 sm:px-20">
+      <button type="button" class="icon-btn absolute left-4 z-10" data-prev>
+        <Icon name="chevron-left" />
+        <span class="sr-only">{t.common.previous}</span>
+      </button>
+      <div data-stage class="flex max-h-full w-full items-center justify-center"></div>
+      <button type="button" class="icon-btn absolute right-4 z-10" data-next>
+        <Icon name="chevron-right" />
+        <span class="sr-only">{t.common.next}</span>
+      </button>
+    </div>
+    <p data-caption class="mx-auto max-w-3xl p-4 text-center text-sm text-on-dark-2"></p>
+  </div>
+</dialog>
+
+<script>
+  import { initFilters } from '@/scripts/filters';
+  import { initLightboxes } from '@/scripts/lightbox';
+  initFilters();
+  initLightboxes();
+</script>

@@ -1,0 +1,70 @@
+order: 6
+icon: file-search
+title:
+  en: Research & Consultancy
+  hi: अनुसंधान और परामर्श
+summary:
+  en: SOP development, field research, impact assessment and consultancy for institutions and CSR programmes.
+  hi: संस्थाओं और सीएसआर कार्यक्रमों के लिए एसओपी विकास, क्षेत्रीय अनुसंधान, प्रभाव आकलन और परामर्श।
+overview:
+  en: >-
+    We provide research and consultancy services to institutions, government programmes and CSR departments. The work
+    covers process design, field research and the evaluation of programme outcomes.
+  hi: >-
+    हम संस्थाओं, सरकारी कार्यक्रमों और सीएसआर विभागों को अनुसंधान और परामर्श सेवाएँ देते हैं। इस काम में प्रक्रिया डिज़ाइन, क्षेत्रीय अनुसंधान
+    और कार्यक्रम के परिणामों का मूल्यांकन शामिल है।
+focus:
+  - id: sop-development
+    title:
+      en: SOP development
+      hi: एसओपी विकास
+    description:
+      en: Standard operating procedures for training, onboarding and programme operations.
+      hi: प्रशिक्षण, ऑनबोर्डिंग और कार्यक्रम संचालन के लिए मानक संचालन प्रक्रियाएँ।
+  - id: csr-implementation
+    title:
+      en: CSR project implementation
+      hi: सीएसआर परियोजना क्रियान्वयन
+    description:
+      en: Planning and implementation support for CSR-funded skilling and livelihood projects.
+      hi: सीएसआर से वित्तपोषित कौशल विकास और आजीविका परियोजनाओं की योजना और क्रियान्वयन में सहयोग।
+  - id: impact-assessment
+    title:
+      en: Rural impact assessment
+      hi: ग्रामीण प्रभाव आकलन
+    description:
+      en: Assessment of the outcomes of rural skilling and livelihood programmes.
+      hi: ग्रामीण कौशल विकास और आजीविका कार्यक्रमों के परिणामों का आकलन।
+  - id: field-research
+    title:
+      en: Field research
+      hi: क्षेत्रीय अनुसंधान
+    description:
+      en: Primary research and surveys in rural locations.
+      hi: ग्रामीण क्षेत्रों में प्राथमिक अनुसंधान और सर्वेक्षण।
+  - id: programme-evaluation
+    title:
+      en: Programme evaluation
+      hi: कार्यक्रम मूल्यांकन
+    description:
+      en: Evaluation of programme design, delivery and results.
+      hi: कार्यक्रम की रूपरेखा, संचालन और परिणामों का मूल्यांकन।
+  - id: institutional-consultancy
+    title:
+      en: Institutional consultancy
+      hi: संस्थागत परामर्श
+    description:
+      en: Advisory support for institutions that design or deliver skilling programmes.
+      hi: कौशल विकास कार्यक्रम बनाने या चलाने वाली संस्थाओं के लिए सलाह और सहयोग।
+audiences:
+  - en: CSR departments
+    hi: सीएसआर विभाग
+  - en: Government bodies
+    hi: सरकारी निकाय
+  - en: Training institutions and NGOs
+    hi: प्रशिक्षण संस्थान और एनजीओ
+cta:
+  label:
+    en: Submit a research proposal
+    hi: अनुसंधान प्रस्ताव भेजें
+  target: research-proposal

@@ -1,0 +1,170 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import TallyForm from '@/components/forms/TallyForm.astro';
+import PartnerLogoGrid from '@/components/sections/PartnerLogoGrid.astro';
+import Accordion from '@/components/ui/Accordion.astro';
+import Button from '@/components/ui/Button.astro';
+import EditorialNote from '@/components/ui/EditorialNote.astro';
+import EmptyState from '@/components/ui/EmptyState.astro';
+import Icon, { type AnyIconName } from '@/components/ui/Icon.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { siteConfig } from '@/data/site-config';
+import { localeStaticPaths } from '@/i18n';
+import { getDisplayablePartnerLogos, getVerifiedPartners } from '@/utils/content';
+import { formatFileSize, getDocument } from '@/utils/documents';
+import { pageContext } from '@/utils/locale';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const { t, href } = pageContext(Astro.url);
+const copy = t.collaborations;
+const categories = copy.categories.items;
+const icons: Record<keyof typeof categories, AnyIconName> = {
+  rsetis: 'school',
+  banks: 'banknote',
+  csr: 'heart-handshake',
+  government: 'landmark',
+  ngos: 'users',
+  education: 'graduation-cap',
+  other: 'network',
+};
+const models = Object.entries(copy.models.items).map(([id, item]) => ({ id: `model-${id}`, ...item }));
+const verifiedPartners = await getVerifiedPartners();
+const logos = await getDisplayablePartnerLogos();
+const namesOnly = verifiedPartners.filter((partner) => !logos.includes(partner));
+const deck = getDocument(siteConfig.documents.csrProposalDeck);
+const sections = [
+  { id: 'who-we-work-with', label: copy.sections.categories },
+  { id: 'partnership-models', label: copy.sections.models },
+  { id: 'partners', label: copy.sections.partners },
+  { id: 'partner-with-us', label: copy.sections.partner },
+];
+---
+
+<BaseLayout
+  title={copy.seoTitle}
+  description={copy.seoDescription}
+  breadcrumbs={[
+    { name: t.nav.home, path: href('home') },
+    { name: t.nav.collaborations, path: href('collaborations') },
+  ]}
+>
+  <PageHeader
+    eyebrow={copy.header.eyebrow}
+    title={copy.header.title}
+    lead={copy.header.lead}
+    crumbs={[{ label: t.nav.collaborations }]}
+    sections={sections}
+  />
+
+  <section id="who-we-work-with" class="section" aria-labelledby="categories-title">
+    <div class="container-site">
+      <SectionHeading id="categories-title" index="01" eyebrow={copy.categories.eyebrow} title={copy.categories.title} />
+      <ul class="mt-10 grid gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-2 lg:grid-cols-4" data-reveal>
+        {
+          (Object.keys(categories) as (keyof typeof categories)[]).map((key) => (
+            <li class="bg-surface p-6">
+              <span class="icon-tile">
+                <Icon name={icons[key]} />
+              </span>
+              <h3 class="h4 mt-5">{categories[key].title}</h3>
+              <p class="mt-1.5 text-sm text-ink-2">{categories[key].text}</p>
+            </li>
+          ))
+        }
+        <li class="on-dark stretched-card flex flex-col justify-between gap-6 bg-navy-900 p-6">
+          <h3 class="h4">{copy.partner.title}</h3>
+          <a href="#partner-with-us" class="link-arrow stretched-link text-sm">
+            {copy.sections.partner}
+            <Icon name="arrow-down" size={16} />
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="partnership-models" class="section border-y border-line bg-surface" aria-labelledby="models-title">
+    <div class="container-site grid gap-10 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <SectionHeading id="models-title" index="02" eyebrow={copy.models.eyebrow} title={copy.models.title} lead={copy.models.lead} />
+      </div>
+      <div class="lg:col-span-8">
+        <Accordion items={models} />
+      </div>
+    </div>
+  </section>
+
+  <section id="partners" class="section" aria-labelledby="partners-title">
+    <div class="container-site">
+      <SectionHeading id="partners-title" index="03" eyebrow={copy.partners.eyebrow} title={copy.partners.title} />
+      <div class="mt-10 space-y-6">
+        {logos.length > 0 && <PartnerLogoGrid partners={logos} />}
+        {
+          namesOnly.length > 0 && (
+            <ul class="flex flex-wrap gap-2">
+              {namesOnly.map((partner) => (
+                <li class="rounded-sm border border-line bg-surface px-3.5 py-2 text-sm font-bold text-ink shadow-xs">
+                  {partner.data.name}
+                </li>
+              ))}
+            </ul>
+          )
+        }
+        {
+          verifiedPartners.length === 0 && (
+            <EmptyState icon="handshake" title={copy.partners.emptyTitle} text={copy.partners.emptyText} />
+          )
+        }
+        <EditorialNote file="src/content/partners/">
+          A partner appears only with status: verified. Its logo appears only with logoPermission: true and a logo file.
+        </EditorialNote>
+      </div>
+    </div>
+  </section>
+
+  <section id="partner-with-us" class="section border-t border-line bg-surface" aria-labelledby="partner-title">
+    <div class="container-site grid gap-10 lg:grid-cols-12">
+      <div class="lg:col-span-5">
+        <SectionHeading id="partner-title" index="04" eyebrow={copy.partner.eyebrow} title={copy.partner.title} lead={copy.partner.text} />
+        <p class="measure mt-6 text-sm text-ink-2">{copy.partner.fields}</p>
+
+        <div id="csr-proposal-deck" class="panel-muted mt-10 p-6">
+          <div class="flex gap-4">
+            <span class="icon-tile">
+              <Icon name="file-text" />
+            </span>
+            <div>
+              <h3 class="h4">{copy.csrDeck.title}</h3>
+              <p class="mt-1 text-sm text-ink-2">{copy.csrDeck.text}</p>
+            </div>
+          </div>
+          {
+            deck ? (
+              <Button href={deck.href} download icon="download" variant="primary" class="mt-5">
+                {copy.csrDeck.button}
+                <span class="ml-1 font-normal opacity-80">
+                  ({deck.extension}, {formatFileSize(deck.bytes, { mb: t.common.sizeMb, kb: t.common.sizeKb })})
+                </span>
+              </Button>
+            ) : (
+              <>
+                <p class="mt-5 border-t border-line pt-4 text-sm text-ink-2">{copy.csrDeck.unavailable}</p>
+                <EditorialNote class="mt-4" file="src/data/site-config.ts → documents.csrProposalDeck">
+                  Put the PDF in public/documents/ and write its path in site-config.ts to activate the download.
+                </EditorialNote>
+              </>
+            )
+          }
+        </div>
+      </div>
+      <div class="lg:col-span-7">
+        <div class="card p-6 sm:p-8">
+          <TallyForm form="partnership" height={640} />
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

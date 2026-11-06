@@ -1,0 +1,72 @@
+# Work area 1. The file name is the page address: /what-we-do/training-the-trainers/
+order: 1
+icon: presentation
+title:
+  en: Training the Trainers
+  hi: प्रशिक्षकों का प्रशिक्षण
+summary:
+  en: Capacity building for domain skill trainers across India, with multi-language and multi-location training models.
+  hi: पूरे भारत में डोमेन कौशल प्रशिक्षकों का क्षमता निर्माण, बहुभाषी और बहु-स्थान प्रशिक्षण मॉडल के साथ।
+overview:
+  en: >-
+    Our trainer development work focuses on building the capacity of approximately 8,000 to 10,000 domain skill
+    trainers across India. Programmes run in several languages and at several locations, with a clear pathway from
+    onboarding to certification and into a network of master trainers.
+  hi: >-
+    प्रशिक्षक विकास का हमारा काम पूरे भारत में लगभग 8,000 से 10,000 डोमेन कौशल प्रशिक्षकों की क्षमता बढ़ाने पर केंद्रित है।
+    कार्यक्रम कई भाषाओं में और कई स्थानों पर चलते हैं, जिनमें ऑनबोर्डिंग से प्रमाणन तक और फिर मास्टर ट्रेनर नेटवर्क तक का स्पष्ट मार्ग होता है।
+focus:
+  - id: trainer-development
+    title:
+      en: Trainer development programmes
+      hi: प्रशिक्षक विकास कार्यक्रम
+    description:
+      en: Structured programmes that strengthen subject knowledge, facilitation skills and the practical delivery of domain skill training.
+      hi: संरचित कार्यक्रम, जो विषय ज्ञान, प्रशिक्षण संचालन कौशल और डोमेन कौशल प्रशिक्षण की व्यावहारिक प्रस्तुति को मज़बूत करते हैं।
+  - id: multi-language
+    title:
+      en: Multi-language training
+      hi: बहुभाषी प्रशिक्षण
+    description:
+      en: Training in the languages that trainers work in, so that content and assessments are accessible in every region.
+      hi: उन भाषाओं में प्रशिक्षण, जिनमें प्रशिक्षक काम करते हैं, ताकि सामग्री और मूल्यांकन हर क्षेत्र में सुलभ हों।
+  - id: multi-location
+    title:
+      en: Multi-location training models
+      hi: बहु-स्थान प्रशिक्षण मॉडल
+    description:
+      en: Delivery models that combine central, regional and local training locations, so that trainers can learn close to where they work.
+      hi: ऐसे संचालन मॉडल, जो केंद्रीय, क्षेत्रीय और स्थानीय प्रशिक्षण स्थानों को जोड़ते हैं, ताकि प्रशिक्षक अपने कार्यस्थल के पास सीख सकें।
+  - id: fees-certification
+    title:
+      en: Trainer fee and certification systems
+      hi: प्रशिक्षक शुल्क और प्रमाणन प्रणाली
+    description:
+      en: Clear systems for trainer engagement fees and certification. Fees and certification criteria are defined for each programme.
+      hi: प्रशिक्षकों के शुल्क और प्रमाणन के लिए स्पष्ट प्रणाली। शुल्क और प्रमाणन के मानदंड हर कार्यक्रम के लिए तय किए जाते हैं।
+  - id: master-trainer-network
+    title:
+      en: Master Trainer Network
+      hi: मास्टर ट्रेनर नेटवर्क
+    description:
+      en: A network of experienced master trainers who support the development and mentoring of domain skill trainers.
+      hi: अनुभवी मास्टर ट्रेनरों का नेटवर्क, जो डोमेन कौशल प्रशिक्षकों के विकास और मार्गदर्शन में सहयोग करता है।
+  - id: onboarding
+    title:
+      en: Onboarding and development pathways
+      hi: ऑनबोर्डिंग और विकास के मार्ग
+    description:
+      en: A defined path from trainer onboarding through training and certification to continued professional development.
+      hi: प्रशिक्षक ऑनबोर्डिंग से लेकर प्रशिक्षण, प्रमाणन और निरंतर पेशेवर विकास तक का निर्धारित मार्ग।
+audiences:
+  - en: Domain skill trainers
+    hi: डोमेन कौशल प्रशिक्षक
+  - en: Training institutions and RSETIs
+    hi: प्रशिक्षण संस्थान और आरसेटी
+  - en: Programme sponsors
+    hi: कार्यक्रम प्रायोजक
+cta:
+  label:
+    en: Enquire about trainer programmes
+    hi: प्रशिक्षक कार्यक्रमों के बारे में पूछें
+  target: contact

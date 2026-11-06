@@ -1,0 +1,45 @@
+---
+import { localeMeta, locales, type Locale } from '@/i18n';
+import { pageContext } from '@/utils/locale';
+
+interface Props {
+  tone?: 'light' | 'dark';
+  /** Overrides the target page for each language, for example on the 404 page. */
+  alternatePaths?: Partial<Record<Locale, string>> | undefined;
+  class?: string;
+}
+
+const { tone = 'light', alternatePaths, class: className } = Astro.props;
+const { locale, t, alternate } = pageContext(Astro.url);
+const base =
+  tone === 'dark' ? 'text-on-dark-3 hover:text-on-dark hover:bg-white/6' : 'text-ink-3 hover:text-ink hover:bg-navy-50';
+const active = tone === 'dark' ? 'text-on-dark' : 'text-ink';
+---
+
+<div role="group" aria-label={t.header.language} class:list={['flex items-center', className]}>
+  {
+    locales.map((code, i) => (
+      <>
+        {i > 0 && (
+          <span aria-hidden="true" class:list={['px-0.5', tone === 'dark' ? 'text-on-dark-3/60' : 'text-line-strong']}>
+            |
+          </span>
+        )}
+        <a
+          href={alternatePaths?.[code] ?? alternate(code)}
+          lang={code}
+          hreflang={localeMeta[code].hreflang}
+          aria-current={code === locale ? 'true' : undefined}
+          class:list={[
+            'inline-flex h-8 min-w-8 items-center justify-center rounded-sm px-1.5 font-mono text-xs font-medium tracking-[0.06em] transition-colors duration-[80ms]',
+            code === locale ? active : base,
+            code === locale && 'underline decoration-1 underline-offset-4',
+          ]}
+        >
+          <span aria-hidden="true">{localeMeta[code].short}</span>
+          <span class="sr-only">{localeMeta[code].name}</span>
+        </a>
+      </>
+    ))
+  }
+</div>

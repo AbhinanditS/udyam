@@ -1,0 +1,38 @@
+---
+/** A calm, intentional state for sections whose content has not been published yet. */
+import Icon, { type AnyIconName } from './Icon.astro';
+
+interface Props {
+  title: string;
+  text?: string | undefined;
+  icon?: AnyIconName;
+  tone?: 'surface' | 'muted';
+  headingLevel?: 'h2' | 'h3' | 'h4' | 'p';
+  class?: string;
+}
+
+const { title, text, icon = 'info', tone = 'surface', headingLevel: Heading = 'h3', class: className } = Astro.props;
+---
+
+<div
+  class:list={[
+    tone === 'surface' ? 'card' : 'panel-muted',
+    'flex flex-col gap-4 p-6 sm:flex-row sm:items-start sm:gap-5 sm:p-8',
+    className,
+  ]}
+>
+  <span class="icon-tile">
+    <Icon name={icon} />
+  </span>
+  <div class="max-w-[62ch]">
+    <Heading class="h4">{title}</Heading>
+    {text && <p class="mt-1.5 text-ink-2">{text}</p>}
+    {
+      Astro.slots.has('default') && (
+        <div class="mt-5 flex flex-wrap gap-3">
+          <slot />
+        </div>
+      )
+    }
+  </div>
+</div>

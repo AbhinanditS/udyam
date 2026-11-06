@@ -1,0 +1,117 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ImpactIndicators from '@/components/impact/ImpactIndicators.astro';
+import StateExplorer from '@/components/impact/StateExplorer.astro';
+import StatFigure from '@/components/sections/StatFigure.astro';
+import TestimonialCarousel from '@/components/sections/TestimonialCarousel.astro';
+import Button from '@/components/ui/Button.astro';
+import CtaBand from '@/components/ui/CtaBand.astro';
+import EditorialNote from '@/components/ui/EditorialNote.astro';
+import EmptyState from '@/components/ui/EmptyState.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { headlineStats, isPublished } from '@/data/statistics';
+import { localeStaticPaths } from '@/i18n';
+import { getApprovedTestimonials } from '@/utils/content';
+import { pageContext } from '@/utils/locale';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const { t, href } = pageContext(Astro.url);
+const copy = t.impact;
+const stats = headlineStats.filter(isPublished);
+const statesStat = stats.find((stat) => stat.id === 'states');
+const testimonials = await getApprovedTestimonials();
+const sections = [
+  { id: 'presence', label: copy.sections.presence },
+  { id: 'states', label: copy.sections.states },
+  { id: 'dashboard', label: copy.sections.dashboard },
+  { id: 'beneficiary-speak', label: copy.sections.speak },
+];
+---
+
+<BaseLayout
+  title={copy.seoTitle}
+  description={copy.seoDescription}
+  breadcrumbs={[
+    { name: t.nav.home, path: href('home') },
+    { name: t.nav.impact, path: href('impact') },
+  ]}
+>
+  <PageHeader
+    eyebrow={copy.header.eyebrow}
+    title={copy.header.title}
+    lead={copy.header.lead}
+    crumbs={[{ label: t.nav.impact }]}
+    sections={sections}
+  />
+
+  <section id="presence" class="section" aria-labelledby="presence-title">
+    <div class="container-site">
+      <SectionHeading
+        id="presence-title"
+        index="01"
+        eyebrow={copy.presence.eyebrow}
+        title={statesStat ? copy.presence.title : copy.sections.presence}
+        lead={statesStat ? copy.presence.text : undefined}
+      />
+      {
+        stats.length > 0 && (
+          <dl class="mt-10 grid gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-3" data-reveal>
+            {stats.map((stat) => (
+              <StatFigure stat={stat} class="bg-surface p-6 lg:p-8" />
+            ))}
+          </dl>
+        )
+      }
+    </div>
+  </section>
+
+  <section id="states" class="section border-y border-line bg-surface" aria-labelledby="states-title">
+    <div class="container-site">
+      <SectionHeading id="states-title" index="02" eyebrow={copy.states.eyebrow} title={copy.states.title} lead={copy.states.lead} />
+      <div class="mt-10">
+        <StateExplorer />
+      </div>
+      <EditorialNote class="mt-6" file="src/data/india-states.ts">
+        No state-level data has been supplied, so every record shows "not yet published". Add verified figures per state
+        and set status: 'published'. The interactive India map is deferred; it can read the same file.
+      </EditorialNote>
+    </div>
+  </section>
+
+  <section id="dashboard" class="section" aria-labelledby="dashboard-title">
+    <div class="container-site">
+      <SectionHeading id="dashboard-title" index="03" eyebrow={copy.dashboard.eyebrow} title={copy.dashboard.title} lead={copy.dashboard.lead} />
+      <div class="mt-10">
+        <ImpactIndicators />
+      </div>
+      <EditorialNote class="mt-6" file="src/data/statistics.ts">
+        Add verified values to impactIndicators and set status: 'published' to show a figure.
+      </EditorialNote>
+    </div>
+  </section>
+
+  <section id="beneficiary-speak" class="section border-t border-line bg-surface" aria-labelledby="speak-title">
+    <div class="container-site">
+      <SectionHeading id="speak-title" index="04" eyebrow={copy.speak.eyebrow} title={copy.speak.title} lead={copy.speak.lead} />
+      <div class="mt-10">
+        {
+          testimonials.length > 0 ? (
+            <TestimonialCarousel items={testimonials} id="impact-stories" />
+          ) : (
+            <EmptyState icon="messages-square" title={copy.speak.emptyTitle} text={copy.speak.emptyText} tone="muted" />
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title={copy.cta.title} text={copy.cta.text}>
+    <Button href={href('contact')} variant="gold" icon="arrow-right">
+      {copy.cta.button}
+    </Button>
+  </CtaBand>
+</BaseLayout>

@@ -1,0 +1,71 @@
+order: 2
+icon: user-check
+title:
+  en: Trainee Onboarding & Mentorship
+  hi: प्रशिक्षु ऑनबोर्डिंग और मार्गदर्शन
+summary:
+  en: App-based onboarding, reporting and mentorship for trainees that continue after their training ends.
+  hi: प्रशिक्षुओं के लिए ऐप आधारित ऑनबोर्डिंग, रिपोर्टिंग और मार्गदर्शन, जो प्रशिक्षण पूरा होने के बाद भी जारी रहते हैं।
+overview:
+  en: >-
+    Our support for trainees continues after their training ends. Trainees join through app-based onboarding and
+    reporting. We track their settlement after training and continue guidance through mentorship led by domain skill
+    trainers (DSTs).
+  hi: >-
+    प्रशिक्षुओं के लिए हमारा सहयोग प्रशिक्षण पूरा होने के बाद भी जारी रहता है। प्रशिक्षु ऐप आधारित ऑनबोर्डिंग और रिपोर्टिंग से जुड़ते हैं।
+    हम प्रशिक्षण के बाद उनके स्थापन पर नज़र रखते हैं और डोमेन कौशल प्रशिक्षकों (डीएसटी) के नेतृत्व में मार्गदर्शन जारी रखते हैं।
+focus:
+  - id: app-onboarding
+    title:
+      en: App-based trainee onboarding
+      hi: ऐप आधारित प्रशिक्षु ऑनबोर्डिंग
+    description:
+      en: Trainees register and complete onboarding through a mobile application, which keeps their records in one place.
+      hi: प्रशिक्षु मोबाइल ऐप के माध्यम से पंजीकरण और ऑनबोर्डिंग पूरी करते हैं, जिससे उनके सभी रिकॉर्ड एक ही जगह रहते हैं।
+  - id: settlement-tracking
+    title:
+      en: Post-training settlement tracking
+      hi: प्रशिक्षण के बाद स्थापन की ट्रैकिंग
+    description:
+      en: Follow-up on whether trainees have settled into self-employment or wage employment after training.
+      hi: प्रशिक्षण के बाद प्रशिक्षु स्वरोज़गार या वेतन आधारित रोज़गार में स्थापित हुए या नहीं, इसका फ़ॉलो-अप।
+  - id: app-reporting
+    title:
+      en: App-based reporting
+      hi: ऐप आधारित रिपोर्टिंग
+    description:
+      en: Simple reporting by trainees and trainers through the app, which reduces paperwork and supports programme monitoring.
+      hi: ऐप के माध्यम से प्रशिक्षुओं और प्रशिक्षकों द्वारा सरल रिपोर्टिंग, जिससे कागज़ी काम कम होता है और कार्यक्रम की निगरानी में मदद मिलती है।
+  - id: incentives
+    title:
+      en: Incentive systems
+      hi: प्रोत्साहन प्रणाली
+    description:
+      en: Incentives that encourage continued engagement and regular reporting. Details are set for each programme.
+      hi: प्रोत्साहन, जो निरंतर भागीदारी और नियमित रिपोर्टिंग को बढ़ावा देते हैं। इनका विवरण हर कार्यक्रम के लिए तय किया जाता है।
+  - id: dst-mentorship
+    title:
+      en: DST-driven mentorship models
+      hi: डीएसटी आधारित मार्गदर्शन मॉडल
+    description:
+      en: Mentorship led by domain skill trainers (DSTs), who stay in contact with trainees after the training period.
+      hi: डोमेन कौशल प्रशिक्षकों (डीएसटी) के नेतृत्व में मार्गदर्शन, जो प्रशिक्षण अवधि के बाद भी प्रशिक्षुओं के संपर्क में रहते हैं।
+  - id: continued-guidance
+    title:
+      en: Continued guidance after training
+      hi: प्रशिक्षण के बाद निरंतर मार्गदर्शन
+    description:
+      en: Ongoing advice on running and growing an enterprise once formal training is complete.
+      hi: औपचारिक प्रशिक्षण पूरा होने के बाद उद्यम चलाने और बढ़ाने पर लगातार सलाह।
+audiences:
+  - en: Trainees and first-generation entrepreneurs
+    hi: प्रशिक्षु और पहली पीढ़ी के उद्यमी
+  - en: Domain skill trainers
+    hi: डोमेन कौशल प्रशिक्षक
+  - en: Programme partners
+    hi: कार्यक्रम साझेदार
+cta:
+  label:
+    en: Learn about the Trainee App
+    hi: प्रशिक्षु ऐप के बारे में जानें
+  target: apps

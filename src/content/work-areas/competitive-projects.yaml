@@ -1,0 +1,64 @@
+order: 9
+icon: briefcase-business
+title:
+  en: Competitive Projects
+  hi: प्रतिस्पर्धी परियोजनाएँ
+summary:
+  en: Training project tenders, research projects, field surveys and curriculum development opportunities.
+  hi: प्रशिक्षण परियोजना निविदाएँ, अनुसंधान परियोजनाएँ, क्षेत्रीय सर्वेक्षण और पाठ्यक्रम विकास के अवसर।
+overview:
+  en: >-
+    We take part in competitive and institutional projects in skilling, research and curriculum development.
+    Institutions that plan projects in these areas can send us an enquiry.
+  hi: >-
+    हम कौशल विकास, अनुसंधान और पाठ्यक्रम विकास से जुड़ी प्रतिस्पर्धी और संस्थागत परियोजनाओं में भाग लेते हैं। इन क्षेत्रों में परियोजनाओं की
+    योजना बना रही संस्थाएँ हमें पूछताछ भेज सकती हैं।
+focus:
+  - id: training-tenders
+    title:
+      en: Training project tenders
+      hi: प्रशिक्षण परियोजना निविदाएँ
+    description:
+      en: Bids for training projects that government bodies and institutions issue.
+      hi: सरकारी निकायों और संस्थाओं द्वारा जारी प्रशिक्षण परियोजनाओं के लिए बोलियाँ।
+  - id: research-projects
+    title:
+      en: Research projects
+      hi: अनुसंधान परियोजनाएँ
+    description:
+      en: Research assignments on skilling, livelihoods and entrepreneurship.
+      hi: कौशल विकास, आजीविका और उद्यमिता पर अनुसंधान कार्य।
+  - id: field-surveys
+    title:
+      en: Field surveys
+      hi: क्षेत्रीय सर्वेक्षण
+    description:
+      en: Survey design and data collection in rural locations.
+      hi: ग्रामीण क्षेत्रों में सर्वेक्षण की रूपरेखा और आँकड़ों का संग्रह।
+  - id: curriculum-opportunities
+    title:
+      en: Curriculum development opportunities
+      hi: पाठ्यक्रम विकास के अवसर
+    description:
+      en: Projects to design or revise curriculum and learning material.
+      hi: पाठ्यक्रम और अध्ययन सामग्री बनाने या संशोधित करने की परियोजनाएँ।
+  - id: institutional-bidding
+    title:
+      en: Institutional project bidding
+      hi: संस्थागत परियोजनाओं के लिए बोली
+    description:
+      en: Bids for institutional programmes, alone or with partners.
+      hi: संस्थागत कार्यक्रमों के लिए, अकेले या साझेदारों के साथ, बोलियाँ।
+audiences:
+  - en: Government departments and agencies
+    hi: सरकारी विभाग और एजेंसियाँ
+  - en: Institutions that issue tenders
+    hi: निविदाएँ जारी करने वाली संस्थाएँ
+  - en: Consortium partners
+    hi: कंसोर्टियम साझेदार
+cta:
+  label:
+    en: Submit a project enquiry
+    hi: परियोजना संबंधी पूछताछ भेजें
+  target: partner
+prominentCta: true

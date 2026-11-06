@@ -1,0 +1,137 @@
+---
+/**
+ * Inline Tally form. Validation and submission happen inside Tally. The website listens for
+ * Tally's own "loaded" and "submitted" events to show loading, slow-network and success states.
+ * When the form link is not configured, a clear notice replaces the form.
+ */
+import Icon from '@/components/ui/Icon.astro';
+import EditorialNote from '@/components/ui/EditorialNote.astro';
+import { siteConfig, type FormKey } from '@/data/site-config';
+import { pageContext } from '@/utils/locale';
+import { parseTallyUrl } from '@/utils/tally';
+
+interface Props {
+  form: FormKey;
+  /** Initial height in pixels, to limit layout shift before Tally sizes the frame. */
+  height?: number;
+  class?: string;
+}
+
+const { form, height = 520, class: className } = Astro.props;
+const { locale, t, href } = pageContext(Astro.url);
+const parsed = parseTallyUrl(siteConfig.forms[form]);
+const title = t.forms.titles[form];
+const email = siteConfig.contact.email;
+const envName = `PUBLIC_TALLY_${form.toUpperCase()}_URL`;
+const [emailBefore = '', emailAfter = ''] = t.forms.unavailableWithEmail.split('{email}');
+
+const query = new URLSearchParams({
+  alignLeft: '1',
+  hideTitle: '1',
+  transparentBackground: '1',
+  dynamicHeight: '1',
+  language: locale,
+  page: Astro.url.pathname,
+});
+const embedSrc = parsed?.embedUrl ? `${parsed.embedUrl}?${query.toString()}` : null;
+---
+
+<div class={className}>
+  {
+    embedSrc && parsed ? (
+      <div class="tally-embed" data-tally-embed data-form-id={parsed.id ?? undefined} data-state="idle">
+        <div
+          data-show-when="submitted"
+          data-success
+          tabindex="-1"
+          role="status"
+          hidden
+          class="mb-6 flex gap-3 rounded-md border border-green-600/25 bg-green-50 p-4 text-green-700"
+        >
+          <Icon name="circle-check" size={20} class="mt-0.5 shrink-0" />
+          <div>
+            <p class="font-bold">{t.forms.successTitle}</p>
+            <p class="text-sm">{t.forms.successText}</p>
+          </div>
+        </div>
+
+        <p data-show-when="idle loading slow" class="meta flex items-center gap-2">
+          <Icon name="loader-circle" size={14} class="animate-spin motion-reduce:animate-none" />
+          {t.forms.loading}
+        </p>
+
+        <iframe
+          data-tally-src={embedSrc}
+          loading="lazy"
+          width="100%"
+          height={height}
+          title={title}
+          class="mt-3"
+        />
+
+        <div data-show-when="slow" hidden class="mt-4 rounded-md border border-line bg-canvas p-4 text-sm" role="status">
+          <p>{t.forms.slow}</p>
+          <a href={parsed.shareUrl} class="link mt-1 inline-block font-bold" target="_blank" rel="noopener noreferrer">
+            {t.forms.openInNewTab}
+            <span class="sr-only">{t.common.opensInNewTab}</span>
+          </a>
+        </div>
+
+        <noscript>
+          <p class="mt-3 text-sm">
+            {t.forms.noscript}{' '}
+            <a href={parsed.shareUrl} class="link font-bold" target="_blank" rel="noopener noreferrer">
+              {t.forms.openInNewTab}
+            </a>
+          </p>
+        </noscript>
+
+        <p class="mt-4 border-t border-line pt-4 text-xs text-ink-3">
+          {t.forms.privacyNote}{' '}
+          <a href={href('privacy')} class="link">
+            {t.forms.privacyLink}
+          </a>
+        </p>
+      </div>
+    ) : parsed ? (
+      <div class="panel-muted p-6">
+        <a href={parsed.shareUrl} class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+          <span>{t.forms.openInNewTab}</span>
+          <Icon name="arrow-up-right" size={18} />
+          <span class="sr-only">{t.common.opensInNewTab}</span>
+        </a>
+        <p class="mt-4 text-xs text-ink-3">{t.forms.privacyNote}</p>
+      </div>
+    ) : (
+      <div class="panel-muted flex gap-4 p-6" role="note">
+        <span class="icon-tile">
+          <Icon name="info" />
+        </span>
+        <div>
+          <p class="font-bold">{t.forms.unavailableTitle}</p>
+          <p class="mt-1 text-ink-2">
+            {email ? (
+              <>
+                {emailBefore}
+                <a href={`mailto:${email}`} class="link font-bold">
+                  {email}
+                </a>
+                {emailAfter}
+              </>
+            ) : (
+              t.forms.unavailableNoEmail
+            )}
+          </p>
+          <EditorialNote class="mt-4" file={`.env or Cloudflare Pages: ${envName}`}>
+            This form is not configured. Create the form in Tally, then add its share link (https://tally.so/r/…) as {envName}.
+          </EditorialNote>
+        </div>
+      </div>
+    )
+  }
+</div>
+
+<script>
+  import { initTallyEmbeds } from '@/scripts/tally';
+  initTallyEmbeds();
+</script>

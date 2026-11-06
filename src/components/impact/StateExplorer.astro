@@ -1,0 +1,157 @@
+---
+/**
+ * State and union territory data. A selector shows one record at a time. The full table below
+ * works without JavaScript and for screen readers. Only verified figures are ever shown.
+ * The data lives in src/data/india-states.ts. An interactive map can use the same data later.
+ */
+import Icon from '@/components/ui/Icon.astro';
+import { indiaStates, type StateRecord } from '@/data/india-states';
+import { fill, formatDate, formatNumber, pick, pickText } from '@/i18n';
+import { pageContext } from '@/utils/locale';
+
+const { locale, t } = pageContext(Astro.url);
+const copy = t.impact.states;
+const collator = new Intl.Collator(locale === 'hi' ? 'hi-IN' : 'en-IN');
+const states = [...indiaStates].sort((a, b) => collator.compare(pickText(a.name, locale), pickText(b.name, locale)));
+const published = states.filter((state) => state.data.status === 'published');
+const typeLabel = (state: StateRecord) => (state.type === 'state' ? copy.state : copy.unionTerritory);
+const figure = (state: StateRecord, key: 'trainers' | 'beneficiaries') => {
+  const value = state.data.status === 'published' ? state.data[key] : undefined;
+  return typeof value === 'number' ? formatNumber(value, locale) : null;
+};
+---
+
+<div class="space-y-6" data-state-explorer>
+  <div class="card p-6 sm:p-8">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between" data-js-only hidden>
+      <div class="w-full max-w-md">
+        <label for="state-select" class="meta">{copy.selectLabel}</label>
+        <div class="relative mt-2">
+          <select
+            id="state-select"
+            class="h-12 w-full appearance-none rounded-sm border border-field bg-surface pr-10 pl-3.5 font-bold text-ink shadow-xs transition-colors duration-[80ms] hover:border-ink-3"
+          >
+            <option value="">{copy.selectPlaceholder}</option>
+            {
+              states.map((state) => (
+                <option value={state.code}>{pickText(state.name, locale)}</option>
+              ))
+            }
+          </select>
+          <Icon name="chevron-down" size={18} class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-ink-3" />
+        </div>
+      </div>
+      <span class:list={['badge shrink-0 self-start sm:self-auto', published.length > 0 ? 'badge-verified' : 'badge-pending']}>
+        {fill(copy.verifiedCount, { count: published.length, total: states.length })}
+      </span>
+    </div>
+
+    <div aria-live="polite" class="mt-8 border-t border-line pt-8 [[hidden]+&]:mt-0 [[hidden]+&]:border-t-0 [[hidden]+&]:pt-0">
+      <p data-state-intro class="max-w-[60ch] text-ink-2">{copy.note}</p>
+      {
+        states.map((state) => {
+          const name = pick(state.name, locale);
+          const trainers = figure(state, 'trainers');
+          const beneficiaries = figure(state, 'beneficiaries');
+          const programmes = state.data.status === 'published' ? (state.data.programmes ?? []) : [];
+          const activity = state.data.status === 'published' ? state.data.activity : undefined;
+          return (
+            <article data-state-panel={state.code} id={`state-${state.code}`} hidden aria-labelledby={`state-${state.code}-name`}>
+              <div class="flex flex-wrap items-baseline gap-x-4 gap-y-2">
+                <h3 id={`state-${state.code}-name`} class="h3" lang={name.isFallback ? 'en' : undefined}>
+                  {name.text}
+                </h3>
+                <span class="meta">
+                  {typeLabel(state)} · {copy.region}: {copy.regions[state.region]}
+                </span>
+              </div>
+              <dl class="mt-6 grid gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-2">
+                {[
+                  { label: copy.trainers, value: trainers },
+                  { label: copy.beneficiaries, value: beneficiaries },
+                ].map((item) => (
+                  <div class="bg-surface p-5">
+                    <dt class="meta">{item.label}</dt>
+                    <dd class="mt-2">
+                      {item.value ? (
+                        <span class="tabular text-3xl font-black text-navy-900">{item.value}</span>
+                      ) : (
+                        <span class="badge badge-pending">{copy.pending}</span>
+                      )}
+                    </dd>
+                  </div>
+                ))}
+                <div class="bg-surface p-5 sm:col-span-2">
+                  <dt class="meta">{copy.programmes}</dt>
+                  <dd class="mt-2">
+                    {programmes.length > 0 ? (
+                      <ul class="flex flex-wrap gap-2">
+                        {programmes.map((programme) => (
+                          <li class="badge">{pickText(programme, locale)}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <span class="badge badge-pending">{copy.pending}</span>
+                    )}
+                  </dd>
+                </div>
+                <div class="bg-surface p-5 sm:col-span-2">
+                  <dt class="meta">{copy.activity}</dt>
+                  <dd class="mt-2 text-ink-2">
+                    {activity ? pickText(activity, locale) : fill(copy.pendingText, { name: name.text })}
+                  </dd>
+                </div>
+              </dl>
+              {state.data.status === 'published' && state.data.asOf && (
+                <p class="mt-3 text-xs text-ink-3">
+                  {fill(t.common.asOf, { date: formatDate(new Date(state.data.asOf), locale) })}
+                  {state.data.source && <> · {fill(t.common.source, { source: pickText(state.data.source, locale) })}</>}
+                </p>
+              )}
+            </article>
+          );
+        })
+      }
+    </div>
+  </div>
+
+  <details class="accordion-item card">
+    <summary class="flex min-h-14 items-center justify-between gap-4 px-6 py-4">
+      <span class="font-bold">{copy.listTitle}</span>
+      <Icon name="chevron-down" size={18} class="accordion-chevron shrink-0 text-ink-3" />
+    </summary>
+    <div class="overflow-x-auto border-t border-line">
+      <table class="w-full min-w-[36rem] text-left text-sm">
+        <caption class="sr-only">{copy.listTitle}</caption>
+        <thead class="bg-canvas">
+          <tr>
+            <th scope="col" class="meta px-6 py-3 font-medium">{copy.selectLabel}</th>
+            <th scope="col" class="meta px-6 py-3 font-medium">{copy.region}</th>
+            <th scope="col" class="meta px-6 py-3 font-medium">{copy.trainers}</th>
+            <th scope="col" class="meta px-6 py-3 font-medium">{copy.beneficiaries}</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-line">
+          {
+            states.map((state) => (
+              <tr>
+                <th scope="row" class="px-6 py-3 font-bold text-ink">
+                  {pickText(state.name, locale)}
+                  <span class="block text-xs font-normal text-ink-3">{typeLabel(state)}</span>
+                </th>
+                <td class="px-6 py-3 text-ink-2">{copy.regions[state.region]}</td>
+                <td class="tabular px-6 py-3 text-ink-2">{figure(state, 'trainers') ?? copy.pending}</td>
+                <td class="tabular px-6 py-3 text-ink-2">{figure(state, 'beneficiaries') ?? copy.pending}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </details>
+</div>
+
+<script>
+  import { initStateExplorer } from '@/scripts/state-explorer';
+  initStateExplorer();
+</script>

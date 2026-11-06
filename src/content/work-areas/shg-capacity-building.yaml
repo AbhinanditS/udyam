@@ -1,0 +1,70 @@
+order: 8
+icon: users
+title:
+  en: SHG Capacity Building
+  hi: स्वयं सहायता समूहों का क्षमता निर्माण
+summary:
+  en: Short-term training for self-help groups on marketing, packaging, branding and business development.
+  hi: स्वयं सहायता समूहों के लिए मार्केटिंग, पैकेजिंग, ब्रांडिंग और व्यवसाय विकास पर अल्पकालिक प्रशिक्षण।
+overview:
+  en: >-
+    Self-help groups (SHGs) play an important role in rural livelihoods. Our short-term training programmes help SHG
+    members present, market and sell their products, and build their enterprises.
+  hi: >-
+    स्वयं सहायता समूह (एसएचजी) ग्रामीण आजीविका में महत्वपूर्ण भूमिका निभाते हैं। हमारे अल्पकालिक प्रशिक्षण कार्यक्रम एसएचजी सदस्यों को अपने
+    उत्पाद प्रस्तुत करने, उनकी मार्केटिंग करने, उन्हें बेचने और अपने उद्यम बढ़ाने में मदद करते हैं।
+focus:
+  - id: digital-marketing
+    title:
+      en: Digital marketing
+      hi: डिजिटल मार्केटिंग
+    description:
+      en: Using phones, social media and online marketplaces to reach customers.
+      hi: ग्राहकों तक पहुँचने के लिए फ़ोन, सोशल मीडिया और ऑनलाइन बाज़ारों का उपयोग।
+  - id: packaging
+    title:
+      en: Packaging
+      hi: पैकेजिंग
+    description:
+      en: Packaging that protects products and meets the expectations of buyers.
+      hi: ऐसी पैकेजिंग, जो उत्पादों को सुरक्षित रखे और खरीदारों की अपेक्षाओं पर खरी उतरे।
+  - id: branding
+    title:
+      en: Branding
+      hi: ब्रांडिंग
+    description:
+      en: A consistent identity for the products of a group.
+      hi: समूह के उत्पादों के लिए एक समान पहचान।
+  - id: product-presentation
+    title:
+      en: Product presentation
+      hi: उत्पाद प्रस्तुति
+    description:
+      en: Presenting products well at markets, at exhibitions and online.
+      hi: बाज़ारों, प्रदर्शनियों और ऑनलाइन माध्यमों पर उत्पादों की अच्छी प्रस्तुति।
+  - id: business-development
+    title:
+      en: Business development
+      hi: व्यवसाय विकास
+    description:
+      en: Planning for growth, new customers and new products.
+      hi: विकास, नए ग्राहकों और नए उत्पादों के लिए योजना।
+  - id: entrepreneurship-support
+    title:
+      en: Entrepreneurship support
+      hi: उद्यमिता सहयोग
+    description:
+      en: Support for members who want to start or expand an enterprise.
+      hi: उन सदस्यों के लिए सहयोग, जो उद्यम शुरू करना या बढ़ाना चाहते हैं।
+audiences:
+  - en: Self-help groups and their federations
+    hi: स्वयं सहायता समूह और उनके संघ
+  - en: Livelihood programmes
+    hi: आजीविका कार्यक्रम
+  - en: CSR partners
+    hi: सीएसआर साझेदार
+cta:
+  label:
+    en: Plan an SHG programme
+    hi: एसएचजी कार्यक्रम की योजना बनाएँ
+  target: partner

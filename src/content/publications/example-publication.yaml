@@ -1,0 +1,11 @@
+# Example entry. A publication can be published only when its PDF exists in public/documents/.
+status: draft
+category: research-report
+title:
+  en: '[Replace with the title]'
+description:
+  en: '[Replace with a one-sentence description]'
+date: 2026-01-01
+# file: /documents/research/report-name.pdf
+# thumbnail: ./report-cover.jpg
+# language: en

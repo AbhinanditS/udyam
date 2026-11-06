@@ -1,0 +1,23 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/ui/Button.astro';
+import { pageContext } from '@/utils/locale';
+
+const { t, href } = pageContext(Astro.url);
+const copy = t.notFound;
+---
+
+<BaseLayout title={copy.seoTitle} noindex alternatePaths={{ en: '/', hi: '/hi/' }}>
+  <section class="section" aria-labelledby="not-found-title">
+    <div class="container-site py-8 lg:py-16">
+      <p class="eyebrow">{copy.eyebrow}</p>
+      <h1 id="not-found-title" class="h1 mt-4">{copy.title}</h1>
+      <p class="lead mt-5">{copy.text}</p>
+      <div class="mt-10 flex flex-wrap gap-3">
+        <Button href={href('home')} icon="arrow-right">{copy.home}</Button>
+        <Button href={href('contact')} variant="secondary">{copy.contact}</Button>
+        <Button href={href('sitemap')} variant="secondary">{copy.sitemap}</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

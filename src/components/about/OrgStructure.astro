@@ -1,0 +1,26 @@
+---
+import { pageContext } from '@/utils/locale';
+
+const { t } = pageContext(Astro.url);
+const tiers = t.about.structure.tiers;
+const widths = ['sm:w-[52%]', 'sm:w-[66%]', 'sm:w-[82%]', 'sm:w-full'];
+---
+
+<ol class="mx-auto flex max-w-3xl flex-col items-center" aria-label={t.about.structure.diagramLabel} data-reveal>
+  {
+    tiers.map((tier, i) => (
+      <li class:list={['flex w-full flex-col items-center', widths[i]]}>
+        {i > 0 && <span class="h-8 w-px bg-line-strong" aria-hidden="true" />}
+        <div
+          class:list={[
+            'w-full rounded-md border px-6 py-5 text-center',
+            i === 0 ? 'on-dark border-navy-900 bg-navy-900' : 'border-line bg-surface shadow-xs',
+          ]}
+        >
+          <span class="meta tabular">{String(i + 1).padStart(2, '0')}</span>
+          <p class="h4 mt-1">{tier}</p>
+        </div>
+      </li>
+    ))
+  }
+</ol>

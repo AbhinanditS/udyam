@@ -1,0 +1,54 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import { fill } from '@/i18n';
+import { pageContext } from '@/utils/locale';
+
+interface Props {
+  partners: CollectionEntry<'partners'>[];
+  class?: string;
+}
+
+const { partners, class: className } = Astro.props;
+const { t } = pageContext(Astro.url);
+---
+
+<ul class:list={['grid grid-cols-2 gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-3 lg:grid-cols-5', className]}>
+  {
+    partners.map((partner) =>
+      partner.data.logo ? (
+        <li class="bg-surface">
+          {partner.data.url ? (
+            <a
+              href={partner.data.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group flex h-28 items-center justify-center p-6 transition-colors duration-[80ms] hover:bg-navy-50"
+            >
+              <Image
+                src={partner.data.logo}
+                alt={partner.data.name}
+                width={320}
+                class="max-h-12 w-auto object-contain grayscale transition-[filter] duration-150 group-hover:grayscale-0"
+                loading="lazy"
+              />
+              <span class="sr-only">
+                {fill(t.collaborations.partners.visit, { name: partner.data.name })} {t.common.opensInNewTab}
+              </span>
+            </a>
+          ) : (
+            <div class="flex h-28 items-center justify-center p-6">
+              <Image
+                src={partner.data.logo}
+                alt={partner.data.name}
+                width={320}
+                class="max-h-12 w-auto object-contain grayscale"
+                loading="lazy"
+              />
+            </div>
+          )}
+        </li>
+      ) : null,
+    )
+  }
+</ul>

@@ -1,0 +1,59 @@
+order: 7
+icon: award
+title:
+  en: Awards & Recognition
+  hi: पुरस्कार और सम्मान
+summary:
+  en: State, regional and national recognition programmes for trainers across training sectors.
+  hi: विभिन्न प्रशिक्षण क्षेत्रों के प्रशिक्षकों के लिए राज्य, क्षेत्रीय और राष्ट्रीय स्तर के सम्मान कार्यक्रम।
+overview:
+  en: >-
+    Recognition encourages good practice. Our awards programme is designed to recognise trainers at state, regional
+    and national levels, across training sectors.
+  hi: >-
+    सम्मान अच्छे काम को प्रोत्साहित करता है। हमारा पुरस्कार कार्यक्रम विभिन्न प्रशिक्षण क्षेत्रों के प्रशिक्षकों को राज्य, क्षेत्रीय और राष्ट्रीय स्तर
+    पर सम्मानित करने के लिए बनाया गया है।
+focus:
+  - id: state-awards
+    title:
+      en: State-level trainer awards
+      hi: राज्य स्तरीय प्रशिक्षक पुरस्कार
+    description:
+      en: Recognition for trainers within each state.
+      hi: हर राज्य के भीतर प्रशिक्षकों का सम्मान।
+  - id: regional-awards
+    title:
+      en: Regional awards
+      hi: क्षेत्रीय पुरस्कार
+    description:
+      en: Awards that recognise trainers across a region.
+      hi: पूरे क्षेत्र के प्रशिक्षकों को सम्मानित करने वाले पुरस्कार।
+  - id: national-awards
+    title:
+      en: National awards
+      hi: राष्ट्रीय पुरस्कार
+    description:
+      en: National recognition for outstanding trainers.
+      hi: उत्कृष्ट प्रशिक्षकों के लिए राष्ट्रीय सम्मान।
+  - id: sector-recognition
+    title:
+      en: Recognition across training sectors
+      hi: विभिन्न प्रशिक्षण क्षेत्रों में सम्मान
+    description:
+      en: Recognition programmes that cover different training sectors and trades.
+      hi: ऐसे सम्मान कार्यक्रम, जो अलग-अलग प्रशिक्षण क्षेत्रों और व्यवसायों को शामिल करते हैं।
+note:
+  en: Award categories, criteria and results are announced with each awards cycle.
+  hi: पुरस्कार की श्रेणियाँ, मानदंड और परिणाम हर पुरस्कार चक्र के साथ घोषित किए जाते हैं।
+audiences:
+  - en: Domain skill trainers
+    hi: डोमेन कौशल प्रशिक्षक
+  - en: Master trainers
+    hi: मास्टर ट्रेनर
+  - en: Training institutions
+    hi: प्रशिक्षण संस्थान
+cta:
+  label:
+    en: Ask about the awards programme
+    hi: पुरस्कार कार्यक्रम के बारे में पूछें
+  target: contact

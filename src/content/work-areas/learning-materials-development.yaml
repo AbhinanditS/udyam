@@ -1,0 +1,70 @@
+order: 4
+icon: book-open
+title:
+  en: Learning Materials Development
+  hi: अध्ययन सामग्री विकास
+summary:
+  en: NSQF-aligned curriculum, handbooks, and digital and print learning materials for trainers and trainees.
+  hi: प्रशिक्षकों और प्रशिक्षुओं के लिए एनएसक्यूएफ के अनुरूप पाठ्यक्रम, पुस्तिकाएँ, और डिजिटल व मुद्रित अध्ययन सामग्री।
+overview:
+  en: >-
+    Good training needs good material. We design courses and develop learning resources aligned to the National
+    Skills Qualification Framework (NSQF), in digital and print formats, for trainers and trainees.
+  hi: >-
+    अच्छे प्रशिक्षण के लिए अच्छी सामग्री आवश्यक है। हम प्रशिक्षकों और प्रशिक्षुओं के लिए राष्ट्रीय कौशल योग्यता फ्रेमवर्क (एनएसक्यूएफ)
+    के अनुरूप पाठ्यक्रम बनाते हैं और डिजिटल व मुद्रित रूप में अध्ययन संसाधन तैयार करते हैं।
+focus:
+  - id: nsqf-curriculum
+    title:
+      en: NSQF-aligned curriculum
+      hi: एनएसक्यूएफ के अनुरूप पाठ्यक्रम
+    description:
+      en: Curriculum structured to align with the National Skills Qualification Framework.
+      hi: राष्ट्रीय कौशल योग्यता फ्रेमवर्क के अनुरूप संरचित पाठ्यक्रम।
+  - id: handbooks
+    title:
+      en: Training handbooks
+      hi: प्रशिक्षण पुस्तिकाएँ
+    description:
+      en: Handbooks that help trainers deliver sessions consistently.
+      hi: पुस्तिकाएँ, जो प्रशिक्षकों को सत्रों का एक समान संचालन करने में मदद करती हैं।
+  - id: digital-materials
+    title:
+      en: Digital learning materials
+      hi: डिजिटल अध्ययन सामग्री
+    description:
+      en: Content designed for mobile and online learning.
+      hi: मोबाइल और ऑनलाइन सीखने के लिए तैयार की गई सामग्री।
+  - id: print-content
+    title:
+      en: Print content development
+      hi: मुद्रित सामग्री का विकास
+    description:
+      en: Printed materials for classrooms and for field locations with limited connectivity.
+      hi: कक्षाओं और कम कनेक्टिविटी वाले क्षेत्रीय स्थानों के लिए मुद्रित सामग्री।
+  - id: course-design
+    title:
+      en: Course and curriculum design
+      hi: कोर्स और पाठ्यक्रम डिज़ाइन
+    description:
+      en: Course design from learning outcomes to session plans and assessments.
+      hi: सीखने के परिणामों से लेकर सत्र योजनाओं और मूल्यांकन तक, कोर्स का डिज़ाइन।
+  - id: trainer-resources
+    title:
+      en: Structured trainer resources
+      hi: संरचित प्रशिक्षक संसाधन
+    description:
+      en: Session guides, activity plans and reference material, organised for trainers.
+      hi: प्रशिक्षकों के लिए व्यवस्थित सत्र गाइड, गतिविधि योजनाएँ और संदर्भ सामग्री।
+audiences:
+  - en: Training institutions
+    hi: प्रशिक्षण संस्थान
+  - en: Government and CSR programmes
+    hi: सरकारी और सीएसआर कार्यक्रम
+  - en: Trainers
+    hi: प्रशिक्षक
+cta:
+  label:
+    en: Discuss a curriculum project
+    hi: पाठ्यक्रम परियोजना पर चर्चा करें
+  target: contact

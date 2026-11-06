@@ -1,0 +1,69 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import Icon from '@/components/ui/Icon.astro';
+import VideoEmbed from '@/components/ui/VideoEmbed.astro';
+import { pick, pickText, type Locale } from '@/i18n';
+import { pageContext } from '@/utils/locale';
+
+interface Props {
+  item: CollectionEntry<'testimonials'>;
+  class?: string;
+}
+
+const { item, class: className } = Astro.props;
+const { locale, t } = pageContext(Astro.url);
+const data = item.data;
+// Use the quotation in the page language when approved, otherwise the approved original.
+const quoteLang: Locale = data.quote[locale] ? locale : data.quote.en ? 'en' : 'hi';
+const quote = data.quote[quoteLang] ?? '';
+const quoteIsFallback = quoteLang !== locale;
+const meta = [data.location, data.sector].filter((value) => value !== undefined);
+---
+
+<figure class:list={['card flex h-full flex-col p-6 lg:p-8', className]}>
+  {
+    data.youtubeId || data.videoFile ? (
+      <VideoEmbed
+        title={data.name}
+        youtubeId={data.youtubeId}
+        videoFile={data.videoFile}
+        poster={data.photo}
+        class="mb-6"
+      />
+    ) : null
+  }
+  <Icon name="quote" size={22} class="text-gold-500" />
+  <blockquote class="mt-4 flex-1 text-lg leading-relaxed text-ink" lang={quoteIsFallback ? quoteLang : undefined}>
+    <p>{quote}</p>
+  </blockquote>
+  {quoteIsFallback && <span class="badge mt-4 self-start">{quoteLang === 'en' ? t.common.englishOnly : 'हिन्दी'}</span>}
+  <figcaption class="mt-6 flex items-center gap-4 border-t border-line pt-5">
+    {
+      data.photo && !data.youtubeId && !data.videoFile && (
+        <Image
+          src={data.photo}
+          alt={pickText(data.photoAlt, locale)}
+          width={112}
+          height={112}
+          class="h-14 w-14 rounded-full border border-line object-cover"
+          loading="lazy"
+        />
+      )
+    }
+    <div>
+      <p class="font-bold text-ink">{data.name}</p>
+      <p class="meta mt-1">
+        {t.testimonials.types[data.role]}
+        {
+          meta.map((value) => (
+            <>
+              <span aria-hidden="true"> · </span>
+              <span lang={pick(value, locale).isFallback ? 'en' : undefined}>{pick(value, locale).text}</span>
+            </>
+          ))
+        }
+      </p>
+    </div>
+  </figcaption>
+</figure>

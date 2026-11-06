@@ -1,0 +1,1052 @@
+@import "tailwindcss";
+
+/*
+  UdyamSetu design tokens.
+  Surfaces follow elevation logic: the canvas is the furthest surface and cards are the closest.
+  Navy carries the structure. Gold is reserved for impact figures, the emblem and the main call
+  to action on dark surfaces. Green marks verified status only.
+*/
+@theme {
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  /* Surfaces */
+  --color-canvas: #f6f5f2;
+  --color-surface: #ffffff;
+  --color-band: #ecf0f4;
+
+  /* Text */
+  --color-ink: #13202f;
+  --color-ink-2: #435365;
+  --color-ink-3: #5b6878;
+
+  /* Lines */
+  --color-line: #dde3ea;
+  --color-line-strong: #c9d2dc;
+  --color-field: #8d9aaa;
+
+  /* Text and lines on navy surfaces */
+  --color-on-dark: #f3f6f9;
+  --color-on-dark-2: #c2cdd9;
+  --color-on-dark-3: #93a4b8;
+  --color-line-dark: rgb(255 255 255 / 0.1);
+  --color-line-dark-strong: rgb(255 255 255 / 0.2);
+
+  --color-navy-50: #f1f4f8;
+  --color-navy-100: #e2e9f1;
+  --color-navy-200: #c5d2e1;
+  --color-navy-300: #9db2cb;
+  --color-navy-400: #6f8db0;
+  --color-navy-500: #4a6e97;
+  --color-navy-600: #335884;
+  --color-navy-700: #24476f;
+  --color-navy-800: #1a3658;
+  --color-navy-900: #122842;
+  --color-navy-950: #0b1b2e;
+
+  --color-gold-50: #fbf6ea;
+  --color-gold-100: #f5e9cc;
+  --color-gold-200: #edd7a0;
+  --color-gold-300: #e2c173;
+  --color-gold-400: #d4a94b;
+  --color-gold-500: #bf912e;
+  --color-gold-600: #9c7420;
+  --color-gold-700: #7a5a1a;
+
+  --color-green-50: #eef6f1;
+  --color-green-600: #2f7a55;
+  --color-green-700: #24603f;
+
+  /* Type scale, ratio of about 1.25. Line height falls as size rises. */
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1.4;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.45;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.5;
+  --text-base: 1.0625rem;
+  --text-base--line-height: 1.6;
+  --text-lg: 1.25rem;
+  --text-lg--line-height: 1.5;
+  --text-xl: 1.5rem;
+  --text-xl--line-height: 1.35;
+  --text-2xl: 1.875rem;
+  --text-2xl--line-height: 1.2;
+  --text-3xl: 2.375rem;
+  --text-3xl--line-height: 1.12;
+  --text-4xl: 3rem;
+  --text-4xl--line-height: 1.06;
+  --text-5xl: 3.75rem;
+  --text-5xl--line-height: 1.03;
+
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+
+  /* Light mode elevation: a whisper of shadow that always travels with a light border. */
+  --shadow-xs: 0 1px 2px rgb(16 33 56 / 0.05);
+  --shadow-sm: 0 1px 2px rgb(16 33 56 / 0.05), 0 2px 8px rgb(16 33 56 / 0.04);
+  --shadow-md: 0 2px 4px rgb(16 33 56 / 0.05), 0 8px 24px rgb(16 33 56 / 0.08);
+  --shadow-lg: 0 16px 40px rgb(11 27 46 / 0.2);
+
+  --ease-out-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@theme inline {
+  --font-sans: var(--font-devanagari), var(--font-lato);
+  --font-mono: var(--font-plex-mono);
+}
+
+@layer base {
+  :root {
+    --focus-ring: var(--color-navy-600);
+    --header-height: 4.5rem;
+    color-scheme: light;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scroll-padding-top: calc(var(--header-height) + 1rem);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-devanagari), var(--font-lato);
+    font-size: var(--text-base);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Devanagari needs more vertical room for matras above and below the line. */
+  :lang(hi) {
+    line-height: 1.75;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+
+  p,
+  li,
+  dd {
+    text-wrap: pretty;
+  }
+
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-gold-200);
+    color: var(--color-ink);
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+
+  html:has(dialog[open]) {
+    overflow: hidden;
+  }
+
+  @media print {
+    [data-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .container-site {
+    width: 100%;
+    max-width: 76rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+
+  @media (min-width: 40rem) {
+    .container-site {
+      padding-inline: 1.5rem;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .container-site {
+      padding-inline: 2rem;
+    }
+  }
+
+  .section {
+    padding-block: 4rem;
+  }
+
+  @media (min-width: 64rem) {
+    .section {
+      padding-block: 5.5rem;
+    }
+  }
+
+  .section-tight {
+    padding-block: 3rem;
+  }
+
+  @media (min-width: 64rem) {
+    .section-tight {
+      padding-block: 4rem;
+    }
+  }
+
+  /* Headings. Weight and colour carry the hierarchy together with size. */
+  .h-display {
+    font-size: clamp(2.375rem, 1.55rem + 3.3vw, 3.75rem);
+    line-height: 1.04;
+    font-weight: 700;
+    letter-spacing: -0.016em;
+  }
+
+  .h1 {
+    font-size: clamp(2rem, 1.55rem + 1.9vw, 3rem);
+    line-height: 1.08;
+    font-weight: 700;
+    letter-spacing: -0.012em;
+  }
+
+  .h2 {
+    font-size: clamp(1.625rem, 1.33rem + 1.25vw, 2.375rem);
+    line-height: 1.14;
+    font-weight: 700;
+    letter-spacing: -0.008em;
+  }
+
+  .h3 {
+    font-size: var(--text-lg);
+    line-height: 1.3;
+    font-weight: 700;
+  }
+
+  .h4 {
+    font-size: var(--text-base);
+    line-height: 1.4;
+    font-weight: 700;
+  }
+
+  /* Devanagari at 700 reads heavier than Latin, so large Hindi headings use 600. */
+  :lang(hi) .h-display,
+  :lang(hi).h-display {
+    line-height: 1.28;
+    letter-spacing: 0;
+    font-weight: 600;
+  }
+
+  :lang(hi) .h1,
+  :lang(hi) .h2,
+  :lang(hi).h1,
+  :lang(hi).h2 {
+    line-height: 1.32;
+    letter-spacing: 0;
+    font-weight: 600;
+  }
+
+  :lang(hi) .h3,
+  :lang(hi) .h4 {
+    line-height: 1.45;
+  }
+
+  .lead {
+    font-size: var(--text-lg);
+    line-height: 1.55;
+    color: var(--color-ink-2);
+    max-width: 62ch;
+  }
+
+  :lang(hi) .lead {
+    line-height: 1.75;
+  }
+
+  .measure {
+    max-width: 68ch;
+  }
+
+  /* Metadata and labels: mono capitals, never body text. */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-plex-mono);
+    font-size: var(--text-xs);
+    line-height: 1.4;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink-3);
+  }
+
+  .eyebrow-index {
+    color: var(--color-ink);
+  }
+
+  .meta {
+    font-family: var(--font-plex-mono);
+    font-size: var(--text-xs);
+    line-height: 1.45;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ink-3);
+  }
+
+  /* Devanagari has no capitals, and letter spacing breaks the headline stroke. */
+  :lang(hi) .eyebrow,
+  :lang(hi) .meta,
+  :lang(hi).eyebrow,
+  :lang(hi).meta {
+    font-family: var(--font-devanagari), var(--font-lato);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .link {
+    color: var(--color-navy-600);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+    transition: text-decoration-color 80ms ease-out, color 80ms ease-out;
+  }
+
+  .link:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .link-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-weight: 700;
+    color: var(--color-navy-700);
+    text-decoration: none;
+    transition: color 80ms ease-out;
+  }
+
+  .link-arrow svg {
+    transition: transform 120ms var(--ease-out-soft);
+  }
+
+  .link-arrow:hover {
+    color: var(--color-navy-600);
+  }
+
+  .link-arrow:hover svg,
+  .group:hover .link-arrow svg {
+    transform: translateX(2px);
+  }
+
+  /* Buttons. Hover shifts the background, press scales and darkens together. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0.625rem 1.125rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    font-size: 0.9375rem;
+    line-height: 1.2;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    transition:
+      background-color 80ms ease-out,
+      border-color 80ms ease-out,
+      color 80ms ease-out,
+      transform 90ms ease-out;
+  }
+
+  .btn:active {
+    transform: scale(0.97);
+  }
+
+  .btn-sm {
+    min-height: 2.25rem;
+    padding: 0.5rem 0.875rem;
+    font-size: var(--text-sm);
+  }
+
+  .btn-primary {
+    background-color: var(--color-navy-800);
+    color: var(--color-white);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-navy-700);
+  }
+
+  .btn-primary:active {
+    background-color: var(--color-navy-900);
+  }
+
+  .btn-secondary {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    border-color: var(--color-line-strong);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--color-navy-50);
+  }
+
+  .btn-secondary:active {
+    background-color: var(--color-navy-100);
+  }
+
+  .btn-gold {
+    background-color: var(--color-gold-400);
+    color: var(--color-navy-950);
+  }
+
+  .btn-gold:hover {
+    background-color: var(--color-gold-300);
+  }
+
+  .btn-gold:active {
+    background-color: var(--color-gold-500);
+  }
+
+  .btn-on-dark {
+    background-color: transparent;
+    color: var(--color-on-dark);
+    border-color: var(--color-line-dark-strong);
+  }
+
+  .btn-on-dark:hover {
+    background-color: rgb(255 255 255 / 0.06);
+  }
+
+  .btn-on-dark:active {
+    background-color: rgb(255 255 255 / 0.1);
+  }
+
+  .btn[aria-disabled='true'] {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  /* Cards: white surfaces with a light border and a whisper of shadow. */
+  .card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .card-interactive {
+    transition: border-color 80ms ease-out, background-color 80ms ease-out;
+  }
+
+  .card-interactive:hover {
+    border-color: var(--color-line-strong);
+  }
+
+  .card-interactive:active {
+    background-color: var(--color-navy-50);
+  }
+
+  .panel-muted {
+    background-color: var(--color-canvas);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+  }
+
+  .icon-tile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-navy-50);
+    border: 1px solid var(--color-navy-100);
+    color: var(--color-navy-700);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 1.5rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: var(--radius-xs);
+    border: 1px solid var(--color-line);
+    background-color: var(--color-navy-50);
+    color: var(--color-ink-2);
+    font-family: var(--font-plex-mono);
+    font-size: var(--text-2xs);
+    line-height: 1.4;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .badge-dot::before {
+    content: '';
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 999px;
+    background-color: currentColor;
+  }
+
+  .badge-verified {
+    background-color: var(--color-green-50);
+    border-color: color-mix(in srgb, var(--color-green-600) 25%, transparent);
+    color: var(--color-green-700);
+  }
+
+  .badge-pending {
+    background-color: var(--color-gold-50);
+    border-color: var(--color-gold-100);
+    color: var(--color-gold-700);
+  }
+
+  :lang(hi) .badge,
+  :lang(hi).badge {
+    font-family: var(--font-devanagari), var(--font-lato);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+    padding: 0.375rem 0.875rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-line-strong);
+    background-color: var(--color-surface);
+    color: var(--color-ink-2);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 80ms ease-out, border-color 80ms ease-out, color 80ms ease-out, transform 90ms ease-out;
+  }
+
+  .chip:hover {
+    background-color: var(--color-navy-50);
+  }
+
+  .chip:active {
+    transform: scale(0.97);
+  }
+
+  .chip[aria-pressed='true'] {
+    background-color: var(--color-navy-800);
+    border-color: var(--color-navy-800);
+    color: var(--color-white);
+  }
+
+  /* Navy surfaces follow the dark-mode rules: borders separate, text is never pure white. */
+  .on-dark {
+    --focus-ring: var(--color-gold-300);
+    color: var(--color-on-dark-2);
+  }
+
+  .on-dark :where(h1, h2, h3, h4, .h-display, .h1, .h2, .h3, .h4) {
+    color: var(--color-on-dark);
+  }
+
+  .on-dark .lead {
+    color: var(--color-on-dark-2);
+  }
+
+  .on-dark :where(.eyebrow, .meta) {
+    color: var(--color-on-dark-3);
+  }
+
+  .on-dark .eyebrow-index {
+    color: var(--color-on-dark);
+  }
+
+  .on-dark .link {
+    color: var(--color-on-dark);
+  }
+
+  .on-dark .link-arrow {
+    color: var(--color-gold-300);
+  }
+
+  .on-dark .link-arrow:hover {
+    color: var(--color-gold-200);
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -10rem;
+    z-index: 100;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-navy-900);
+    color: var(--color-white);
+    font-weight: 700;
+  }
+
+  .skip-link:focus {
+    top: 1rem;
+  }
+
+  /* Long-form text such as policies. */
+  .prose-site {
+    color: var(--color-ink-2);
+    max-width: 70ch;
+  }
+
+  .prose-site :where(h2) {
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    font-size: var(--text-xl);
+    line-height: 1.3;
+    font-weight: 700;
+    color: var(--color-ink);
+  }
+
+  .prose-site :where(h3) {
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+    font-size: var(--text-lg);
+    line-height: 1.35;
+    font-weight: 700;
+    color: var(--color-ink);
+  }
+
+  .prose-site :where(p, ul, ol) {
+    margin-block: 1rem;
+  }
+
+  .prose-site :where(ul) {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+
+  .prose-site :where(ol) {
+    list-style: decimal;
+    padding-left: 1.25rem;
+  }
+
+  .prose-site :where(li) {
+    margin-block: 0.375rem;
+  }
+
+  .prose-site :where(a) {
+    color: var(--color-navy-600);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .prose-site :where(strong) {
+    color: var(--color-ink);
+    font-weight: 700;
+  }
+
+  /* Accordions built on details and summary. */
+  .accordion-item > summary {
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .accordion-item > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .accordion-item .accordion-chevron {
+    transition: transform 160ms var(--ease-out-soft);
+  }
+
+  .accordion-item[open] .accordion-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Scroll-snap rails used by carousels. */
+  .rail {
+    display: grid;
+    grid-auto-flow: column;
+    gap: 1rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .rail > * {
+    scroll-snap-align: start;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  /* Gentle reveal for content groups below the fold. Runs once, only when motion is welcome. */
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal-ready [data-reveal] {
+      opacity: 0;
+      transform: translateY(8px);
+      transition:
+        opacity 240ms ease-out,
+        transform 240ms var(--ease-out-soft);
+    }
+
+    .reveal-ready [data-reveal].is-revealed {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .editorial-note {
+    border: 1px dashed var(--color-gold-500);
+    border-radius: var(--radius-md);
+    background-color: var(--color-gold-50);
+    padding: 0.75rem 1rem;
+  }
+
+  .on-dark .badge {
+    background-color: rgb(255 255 255 / 0.06);
+    border-color: var(--color-line-dark-strong);
+    color: var(--color-on-dark-2);
+  }
+
+  .btn-gold .badge {
+    background-color: rgb(11 27 46 / 0.08);
+    border-color: rgb(11 27 46 / 0.16);
+    color: var(--color-navy-950);
+  }
+
+  /* Square icon buttons for carousel and dialog controls. */
+  .icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-line-strong);
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    box-shadow: var(--shadow-xs);
+    cursor: pointer;
+    transition: background-color 80ms ease-out, transform 90ms ease-out, opacity 80ms ease-out;
+  }
+
+  .icon-btn:hover {
+    background-color: var(--color-navy-50);
+  }
+
+  .icon-btn:active {
+    transform: scale(0.97);
+    background-color: var(--color-navy-100);
+  }
+
+  .icon-btn[aria-disabled='true'] {
+    opacity: 0.4;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .on-dark .icon-btn {
+    border-color: var(--color-line-dark-strong);
+    background-color: transparent;
+    color: var(--color-on-dark);
+    box-shadow: none;
+  }
+
+  .on-dark .icon-btn:hover {
+    background-color: rgb(255 255 255 / 0.06);
+  }
+
+  /* Header */
+  .site-header {
+    transition: box-shadow 160ms ease-out;
+  }
+
+  .site-header[data-scrolled] {
+    box-shadow: 0 1px 0 var(--color-line), 0 6px 18px rgb(16 33 56 / 0.06);
+  }
+
+  .site-header .header-row {
+    height: var(--header-height);
+    transition: height 160ms var(--ease-out-soft);
+  }
+
+  .site-header[data-scrolled] .header-row {
+    height: 4rem;
+  }
+
+  .nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0.5rem 0.625rem;
+    border-radius: var(--radius-sm);
+    color: var(--color-ink-2);
+    font-size: 0.9375rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    transition: background-color 80ms ease-out, color 80ms ease-out;
+  }
+
+  .nav-link:hover {
+    background-color: var(--color-navy-50);
+    color: var(--color-ink);
+  }
+
+  .nav-link[aria-current='page'],
+  .nav-link[data-section-current] {
+    color: var(--color-ink);
+    font-weight: 700;
+  }
+
+  .nav-link[aria-current='page']::after,
+  .nav-link[data-section-current]::after {
+    content: '';
+    position: absolute;
+    left: 0.625rem;
+    right: 0.625rem;
+    bottom: 0.125rem;
+    height: 2px;
+    border-radius: 1px;
+    background-color: var(--color-navy-800);
+  }
+
+  .menu-panel {
+    transform-origin: top center;
+    transition:
+      opacity 140ms ease-out,
+      transform 160ms var(--ease-out-soft);
+  }
+
+  @starting-style {
+    .menu-panel:not([hidden]) {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+  }
+
+  /* Mobile navigation drawer, built on the native dialog element. */
+  .drawer {
+    margin: 0 0 0 auto;
+    width: min(100vw, 26rem);
+    max-width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    padding: 0;
+    border: 0;
+    border-left: 1px solid var(--color-line);
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    box-shadow: var(--shadow-lg);
+    transition:
+      transform 200ms var(--ease-out-soft),
+      overlay 200ms allow-discrete,
+      display 200ms allow-discrete;
+    transform: translateX(100%);
+  }
+
+  .drawer[open] {
+    transform: translateX(0);
+  }
+
+  @starting-style {
+    .drawer[open] {
+      transform: translateX(100%);
+    }
+  }
+
+  .drawer::backdrop {
+    background-color: rgb(11 27 46 / 0.45);
+    transition:
+      background-color 200ms ease-out,
+      overlay 200ms allow-discrete,
+      display 200ms allow-discrete;
+  }
+
+  @starting-style {
+    .drawer[open]::backdrop {
+      background-color: rgb(11 27 46 / 0);
+    }
+  }
+
+  .drawer-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 3rem;
+    padding: 0.625rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-ink);
+    transition: background-color 80ms ease-out;
+  }
+
+  .drawer-link:hover,
+  .drawer-link:active {
+    background-color: var(--color-navy-50);
+  }
+
+  .drawer-link[aria-current='page'] {
+    background-color: var(--color-navy-50);
+    box-shadow: inset 2px 0 0 var(--color-navy-800);
+  }
+
+  /* Media viewer */
+  .lightbox {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: rgb(8 18 31 / 0.96);
+    color: var(--color-on-dark-2);
+  }
+
+  .lightbox::backdrop {
+    background-color: rgb(8 18 31 / 0.96);
+  }
+
+  .tally-embed iframe {
+    display: block;
+    width: 100%;
+    border: 0;
+  }
+
+  .utility-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    height: 2rem;
+    padding-inline: 0.5rem;
+    border-radius: var(--radius-sm);
+    color: var(--color-on-dark-2);
+    white-space: nowrap;
+    transition: background-color 80ms ease-out, color 80ms ease-out;
+  }
+
+  .utility-link:hover {
+    background-color: rgb(255 255 255 / 0.06);
+    color: var(--color-on-dark);
+  }
+
+  .footer-link {
+    color: var(--color-on-dark-2);
+    border-radius: var(--radius-xs);
+    transition: color 80ms ease-out;
+  }
+
+  .footer-link:hover {
+    color: var(--color-on-dark);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  /* Before the script runs, show only the first announcement to avoid layout shift. */
+  [data-ticker]:not([data-ready]) [data-ticker-item]:not(:first-child) {
+    display: none;
+  }
+
+  /* Cards whose heading link covers the whole card. The focus ring is drawn on the card. */
+  .stretched-card {
+    position: relative;
+  }
+
+  .stretched-card .stretched-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  .stretched-card .stretched-link:focus-visible {
+    outline: none;
+  }
+
+  .stretched-card:has(.stretched-link:focus-visible) {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  [data-carousel][data-static] [data-controls] {
+    display: none;
+  }
+
+  .logo-tagline {
+    font-family: var(--font-plex-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  :lang(hi) .logo-tagline {
+    font-family: var(--font-devanagari), var(--font-lato);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .sr-only-focusable:not(:focus):not(:focus-within) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}

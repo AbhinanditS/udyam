@@ -1,0 +1,29 @@
+---
+/**
+ * Guidance for editors about content that still needs approval.
+ * Visible in local development and when PUBLIC_SHOW_EDITORIAL_NOTES=true. Never in production.
+ */
+import { siteConfig } from '@/data/site-config';
+
+interface Props {
+  /** File or setting to edit. */
+  file?: string;
+  class?: string;
+}
+
+const { file, class: className } = Astro.props;
+---
+
+{
+  siteConfig.showEditorialNotes && (
+    <aside lang="en" class:list={['editorial-note', className]} aria-label="Editorial note">
+      <p class="font-mono text-2xs font-medium tracking-[0.08em] text-gold-700 uppercase">
+        Editorial note. Hidden in production
+      </p>
+      <div class="mt-1.5 text-sm text-ink-2">
+        <slot />
+      </div>
+      {file && <p class="mt-2 font-mono text-xs break-all text-ink-3">{file}</p>}
+    </aside>
+  )
+}

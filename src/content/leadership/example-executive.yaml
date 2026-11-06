@@ -1,0 +1,14 @@
+# Example entry for the Executive Board and Industry Veterans carousel. Copy, rename, fill in and set status: published.
+status: draft
+tier: executive
+order: 1
+name: '[Replace with full name]'
+designation:
+  en: '[Replace with role on the Executive Board]'
+expertise:
+  en: '[Replace with sector expertise, for example Rural banking]'
+background:
+  en: '[Replace with professional background.]'
+# photo: ./full-name.jpg
+# photoAlt:
+#   en: Portrait of the executive board member

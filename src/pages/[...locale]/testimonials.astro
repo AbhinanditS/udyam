@@ -1,0 +1,50 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import TestimonialCarousel from '@/components/sections/TestimonialCarousel.astro';
+import Button from '@/components/ui/Button.astro';
+import EditorialNote from '@/components/ui/EditorialNote.astro';
+import EmptyState from '@/components/ui/EmptyState.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
+import { localeStaticPaths } from '@/i18n';
+import { getApprovedTestimonials } from '@/utils/content';
+import { pageContext } from '@/utils/locale';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const { t, href } = pageContext(Astro.url);
+const copy = t.testimonials;
+const items = await getApprovedTestimonials();
+---
+
+<BaseLayout
+  title={copy.seoTitle}
+  description={copy.seoDescription}
+  breadcrumbs={[
+    { name: t.nav.home, path: href('home') },
+    { name: t.nav.testimonials, path: href('testimonials') },
+  ]}
+>
+  <PageHeader eyebrow={copy.header.eyebrow} title={copy.header.title} lead={copy.header.lead} crumbs={[{ label: t.nav.testimonials }]} />
+
+  <section class="section" aria-label={copy.allTitle}>
+    <div class="container-site">
+      {
+        items.length > 0 ? (
+          <TestimonialCarousel items={items} id="all-testimonials" />
+        ) : (
+          <EmptyState icon="messages-square" title={copy.emptyTitle} text={copy.emptyText} headingLevel="h2">
+            <Button href={href('contact')} variant="secondary" icon="arrow-right">
+              {copy.emptyAction}
+            </Button>
+          </EmptyState>
+        )
+      }
+      <EditorialNote class="mt-6" file="src/content/testimonials/">
+        A testimonial appears only with status: approved, consent: true, illustrative: false and an approved quotation. The
+        Rita Devi entry from the brief is illustrative and stays hidden.
+      </EditorialNote>
+    </div>
+  </section>
+</BaseLayout>

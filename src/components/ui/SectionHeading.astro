@@ -1,0 +1,37 @@
+---
+interface Props {
+  title: string;
+  eyebrow?: string | undefined;
+  /** Two-digit section number that matches the "On this page" list. */
+  index?: string | undefined;
+  lead?: string | undefined;
+  id?: string | undefined;
+  as?: 'h2' | 'h3';
+  class?: string;
+}
+
+const { title, eyebrow, index, lead, id, as: Tag = 'h2', class: className } = Astro.props;
+const hasAction = Astro.slots.has('action');
+---
+
+<div class:list={['flex flex-col gap-6 md:flex-row md:items-end md:justify-between', className]}>
+  <div class="max-w-3xl">
+    {
+      eyebrow && (
+        <p class="eyebrow">
+          {index && <span class="eyebrow-index tabular">{index}</span>}
+          <span>{eyebrow}</span>
+        </p>
+      )
+    }
+    <Tag id={id} class:list={[Tag === 'h2' ? 'h2' : 'h3', eyebrow && 'mt-3']}>{title}</Tag>
+    {lead && <p class="lead mt-4">{lead}</p>}
+  </div>
+  {
+    hasAction && (
+      <div class="shrink-0">
+        <slot name="action" />
+      </div>
+    )
+  }
+</div>

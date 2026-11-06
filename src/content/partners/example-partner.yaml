@@ -1,0 +1,8 @@
+# Example entry. A partner appears on the website only when status is verified.
+# Its logo appears only when logoPermission is true and the logo file is added.
+status: pending
+name: '[Replace with the official name of the partner]'
+category: csr
+logoPermission: false
+# logo: ./partner-logo.svg
+# url: https://www.example.org

@@ -1,0 +1,81 @@
+order: 3
+icon: smartphone
+title:
+  en: Digital Tools for Trainees
+  hi: प्रशिक्षुओं के लिए डिजिटल साधन
+summary:
+  en: Short videos, business guides and micro-ERP tools that help rural entrepreneurs manage their enterprises.
+  hi: छोटे वीडियो, व्यवसाय गाइड और माइक्रो-ईआरपी टूल, जो ग्रामीण उद्यमियों को अपने उद्यम चलाने में मदद करते हैं।
+overview:
+  en: >-
+    Our digital ecosystem is designed to support rural trainees and entrepreneurs. It brings learning content and
+    simple business tools together, so that an entrepreneur can learn, record transactions and prepare for credit in
+    one place.
+  hi: >-
+    हमारा डिजिटल इकोसिस्टम ग्रामीण प्रशिक्षुओं और उद्यमियों की सहायता के लिए बनाया गया है। यह सीखने की सामग्री और सरल व्यावसायिक साधनों को
+    एक साथ लाता है, ताकि उद्यमी एक ही जगह पर सीख सकें, लेन-देन दर्ज कर सकें और ऋण के लिए तैयारी कर सकें।
+focus:
+  - id: diy-videos
+    title:
+      en: DIY short videos
+      hi: स्वयं सीखने के छोटे वीडियो
+    description:
+      en: Short, practical videos that explain business and trade skills step by step.
+      hi: छोटे और व्यावहारिक वीडियो, जो व्यवसाय और व्यापार कौशल को चरण-दर-चरण समझाते हैं।
+  - id: tutorials-guides
+    title:
+      en: Tutorials and business guides
+      hi: ट्यूटोरियल और व्यवसाय गाइड
+    description:
+      en: Written and visual guides on common tasks in running a small enterprise.
+      hi: छोटे उद्यम चलाने के सामान्य कामों पर लिखित और दृश्य गाइड।
+  - id: micro-erp
+    title:
+      en: Micro-ERP tools
+      hi: माइक्रो-ईआरपी टूल
+    description:
+      en: Simple tools to manage stock, orders and day-to-day business records.
+      hi: स्टॉक, ऑर्डर और रोज़मर्रा के व्यावसायिक रिकॉर्ड संभालने के लिए सरल टूल।
+  - id: sales-purchase
+    title:
+      en: Sales and purchase tracking
+      hi: बिक्री और खरीद की ट्रैकिंग
+    description:
+      en: Record sales and purchases to understand cash flow and business performance.
+      hi: नकदी प्रवाह और व्यवसाय के प्रदर्शन को समझने के लिए बिक्री और खरीद दर्ज करें।
+  - id: balance-sheet
+    title:
+      en: Balance sheet assistance
+      hi: बैलेंस शीट में सहायता
+    description:
+      en: Help to prepare a basic balance sheet from recorded transactions.
+      hi: दर्ज किए गए लेन-देन से एक बुनियादी बैलेंस शीट तैयार करने में मदद।
+  - id: loan-assistance
+    title:
+      en: Loan application assistance
+      hi: ऋण आवेदन में सहायता
+    description:
+      en: Support to prepare the documents and information that a loan application needs.
+      hi: ऋण आवेदन के लिए आवश्यक दस्तावेज़ और जानकारी तैयार करने में सहायता।
+  - id: credit-pathways
+    title:
+      en: Access pathways to credit
+      hi: ऋण तक पहुँच के मार्ग
+    description:
+      en: Information about credit and loan products that entrepreneurs can apply for.
+      hi: उन ऋण उत्पादों की जानकारी, जिनके लिए उद्यमी आवेदन कर सकते हैं।
+note:
+  en: UdyamSetu does not approve loans. The lending institution makes every loan decision.
+  hi: UdyamSetu ऋण स्वीकृत नहीं करता। ऋण संबंधी हर निर्णय ऋण देने वाली संस्था लेती है।
+audiences:
+  - en: Rural entrepreneurs
+    hi: ग्रामीण उद्यमी
+  - en: Trainees
+    hi: प्रशिक्षु
+  - en: Members of self-help groups
+    hi: स्वयं सहायता समूहों के सदस्य
+cta:
+  label:
+    en: Learn about the Trainee App
+    hi: प्रशिक्षु ऐप के बारे में जानें
+  target: apps

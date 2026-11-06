@@ -1,0 +1,17 @@
+# Example entry. Set status: open to publish a vacancy. An open vacancy needs applyUrl or applyEmail.
+status: draft
+title:
+  en: '[Replace with the role title]'
+category: trainers
+department:
+  en: '[Replace with the department]'
+location:
+  en: '[Replace with the location]'
+engagement: full-time
+description:
+  en: '[Replace with the role description]'
+eligibility:
+  - en: '[Replace with an eligibility requirement]'
+# applyUrl: https://tally.so/r/...
+# applyEmail: careers@example.org
+# deadline: 2026-12-31

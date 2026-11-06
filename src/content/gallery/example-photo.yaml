@@ -1,0 +1,14 @@
+# Example entry. Put the image next to this file. Publish only with the consent of the people shown.
+status: draft
+type: photo
+category: training
+title:
+  en: '[Replace with a short title]'
+consentConfirmed: false
+# image: ./photo-file.jpg
+# alt:
+#   en: Describe what the photograph shows
+# caption:
+#   en: Optional caption
+# date: 2026-01-15
+# For a video, set type: video and add youtubeId (or videoFile: /media/file.mp4) plus image as the thumbnail.

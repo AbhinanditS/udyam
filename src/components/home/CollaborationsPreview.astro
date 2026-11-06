@@ -1,0 +1,59 @@
+---
+import Icon, { type AnyIconName } from '@/components/ui/Icon.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import PartnerLogoGrid from '@/components/sections/PartnerLogoGrid.astro';
+import { getDisplayablePartnerLogos } from '@/utils/content';
+import { pageContext } from '@/utils/locale';
+
+const { t, href } = pageContext(Astro.url);
+const categories = t.collaborations.categories.items;
+const icons: Record<keyof typeof categories, AnyIconName> = {
+  rsetis: 'school',
+  banks: 'banknote',
+  csr: 'heart-handshake',
+  government: 'landmark',
+  ngos: 'users',
+  education: 'graduation-cap',
+  other: 'network',
+};
+const logos = await getDisplayablePartnerLogos();
+---
+
+<section class="section border-y border-line bg-surface" aria-labelledby="collaborations-title">
+  <div class="container-site">
+    <SectionHeading
+      id="collaborations-title"
+      eyebrow={t.home.collaborations.eyebrow}
+      title={t.home.collaborations.title}
+      lead={t.home.collaborations.lead}
+    />
+    <ul class="mt-10 grid gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-2 lg:grid-cols-4" data-reveal>
+      {
+        (Object.keys(categories) as (keyof typeof categories)[]).map((key) => (
+          <li class="bg-surface p-6">
+            <span class="icon-tile">
+              <Icon name={icons[key]} />
+            </span>
+            <h3 class="h4 mt-5">{categories[key].title}</h3>
+            <p class="mt-1.5 text-sm text-ink-2">{categories[key].text}</p>
+          </li>
+        ))
+      }
+      <li class="on-dark stretched-card flex flex-col justify-between gap-6 bg-navy-900 p-6">
+        <h3 class="h4">{t.home.finalCta.partner}</h3>
+        <a href={href('collaborations')} class="link-arrow stretched-link text-sm">
+          {t.home.collaborations.link}
+          <Icon name="arrow-right" size={16} />
+        </a>
+      </li>
+    </ul>
+    {
+      logos.length > 0 && (
+        <div class="mt-12">
+          <h3 class="meta">{t.home.collaborations.logosTitle}</h3>
+          <PartnerLogoGrid partners={logos} class="mt-4" />
+        </div>
+      )
+    }
+  </div>
+</section>

@@ -1,0 +1,69 @@
+---
+import Icon, { type AnyIconName } from '@/components/ui/Icon.astro';
+import { workAreaPath } from '@/data/navigation';
+import { siteConfig } from '@/data/site-config';
+import { pageContext } from '@/utils/locale';
+import { isExternal } from '@/utils/urls';
+
+const { t, href, path } = pageContext(Astro.url);
+const copy = t.home.quickAccess.items;
+
+const items: { title: string; text: string; href: string; icon: AnyIconName }[] = [
+  {
+    ...copy.trainerOnboarding,
+    href: path(`${workAreaPath('training-the-trainers')}#onboarding`),
+    icon: 'route',
+  },
+  {
+    ...copy.traineeApp,
+    href: siteConfig.apps.traineePlayStore || href('apps', 'trainee-app'),
+    icon: 'smartphone',
+  },
+  { ...copy.csr, href: href('collaborations', 'partner-with-us'), icon: 'heart-handshake' },
+  { ...copy.research, href: href('research'), icon: 'file-search' },
+];
+---
+
+<section aria-labelledby="quick-access-title" class="relative z-10 -mt-16 lg:-mt-20">
+  <h2 id="quick-access-title" class="sr-only">{t.home.quickAccess.heading}</h2>
+  <div class="container-site">
+    <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        items.map((item) => {
+          const external = isExternal(item.href);
+          return (
+            <li class="stretched-card card card-interactive group grid grid-cols-[auto_1fr_auto] gap-x-4 p-4 shadow-sm sm:flex sm:flex-col sm:p-5">
+              <div class="row-span-2 flex items-start justify-between sm:row-span-1">
+                <span class="icon-tile">
+                  <Icon name={item.icon} />
+                </span>
+                <Icon
+                  name={external ? 'arrow-up-right' : 'arrow-right'}
+                  size={18}
+                  class="hidden text-ink-3 transition-[transform,color] duration-[120ms] group-hover:translate-x-0.5 group-hover:text-ink sm:block"
+                />
+              </div>
+              <Icon
+                name={external ? 'arrow-up-right' : 'arrow-right'}
+                size={18}
+                class="col-start-3 row-start-1 self-center text-ink-3 sm:hidden"
+              />
+              <h3 class="h4 col-start-2 row-start-1 self-center sm:mt-5 sm:self-auto">
+                <a
+                  href={item.href}
+                  class="stretched-link"
+                  target={external ? '_blank' : undefined}
+                  rel={external ? 'noopener noreferrer' : undefined}
+                >
+                  {item.title}
+                  {external && <span class="sr-only">{t.common.opensInNewTab}</span>}
+                </a>
+              </h3>
+              <p class="col-start-2 mt-1 text-sm text-ink-2 sm:mt-1.5">{item.text}</p>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,212 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import LangText from '@/components/ui/LangText.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
+import { workAreaPath } from '@/data/navigation';
+import { fill, locales, pickText, type Locale } from '@/i18n';
+import { getWorkAreas } from '@/utils/content';
+import { pageContext } from '@/utils/locale';
+
+export async function getStaticPaths() {
+  const areas = await getWorkAreas();
+  return locales.flatMap((locale: Locale) =>
+    areas.map((area) => ({
+      params: { locale: locale === 'en' ? undefined : locale, slug: area.id },
+      props: { area },
+    })),
+  );
+}
+
+interface Props {
+  area: CollectionEntry<'workAreas'>;
+}
+
+const { area } = Astro.props;
+const { locale, t, href, path } = pageContext(Astro.url);
+const copy = t.whatWeDo.detail;
+const areas = await getWorkAreas();
+const index = areas.findIndex((entry) => entry.id === area.id);
+const previous = index > 0 ? areas[index - 1] : undefined;
+const next = index < areas.length - 1 ? areas[index + 1] : undefined;
+const data = area.data;
+const title = pickText(data.title, locale);
+const ctaHref = {
+  partner: href('collaborations', 'partner-with-us'),
+  contact: href('contact'),
+  apps: href('apps'),
+  'research-proposal': href('research', 'submit-proposal'),
+}[data.cta.target];
+const ctaButton = {
+  partner: t.whatWeDo.cta.partner,
+  contact: t.whatWeDo.cta.contact,
+  apps: t.nav.apps,
+  'research-proposal': t.research.proposal.title,
+}[data.cta.target];
+---
+
+<BaseLayout
+  title={title}
+  description={pickText(data.summary, locale)}
+  breadcrumbs={[
+    { name: t.nav.home, path: href('home') },
+    { name: t.nav.whatWeDo, path: href('whatWeDo') },
+    { name: title, path: path(workAreaPath(area.id)) },
+  ]}
+>
+  <PageHeader
+    eyebrow={fill(copy.areaNumber, { number: data.order })}
+    title={title}
+    lead={pickText(data.summary, locale)}
+    crumbs={[{ label: t.nav.whatWeDo, href: href('whatWeDo') }, { label: title }]}
+    icon={data.icon}
+  />
+
+  <div class="section">
+    <div class="container-site grid gap-10 lg:grid-cols-12">
+      <aside class="lg:col-span-3">
+        <nav aria-labelledby="area-nav-title" class="lg:sticky lg:top-24">
+          <details class="accordion-item card lg:hidden">
+            <summary class="flex min-h-12 items-center justify-between px-4 py-3 font-bold">
+              <span id="area-nav-title">{copy.navTitle}</span>
+              <Icon name="chevron-down" size={18} class="accordion-chevron text-ink-3" />
+            </summary>
+            <ul class="border-t border-line p-2">
+              {
+                areas.map((entry) => (
+                  <li>
+                    <a
+                      href={path(workAreaPath(entry.id))}
+                      class="flex gap-3 rounded-sm px-3 py-2.5 text-sm text-ink-2 hover:bg-navy-50 hover:text-ink aria-[current=page]:bg-navy-50 aria-[current=page]:font-bold aria-[current=page]:text-ink"
+                      aria-current={entry.id === area.id ? 'page' : undefined}
+                    >
+                      <span class="meta tabular">{String(entry.data.order).padStart(2, '0')}</span>
+                      <LangText value={entry.data.title} />
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </details>
+          <div class="hidden lg:block">
+            <p class="meta" aria-hidden="true">{copy.navTitle}</p>
+            <ul class="mt-4 border-l border-line">
+              {
+                areas.map((entry) => (
+                  <li>
+                    <a
+                      href={path(workAreaPath(entry.id))}
+                      class="-ml-px flex gap-3 border-l-2 border-transparent py-2 pr-2 pl-4 text-sm text-ink-2 transition-colors duration-[80ms] hover:border-line-strong hover:text-ink aria-[current=page]:border-navy-800 aria-[current=page]:font-bold aria-[current=page]:text-ink"
+                      aria-current={entry.id === area.id ? 'page' : undefined}
+                    >
+                      <span class="meta tabular pt-0.5">{String(entry.data.order).padStart(2, '0')}</span>
+                      <LangText value={entry.data.title} />
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </nav>
+      </aside>
+
+      <div class="min-w-0 space-y-14 lg:col-span-9 lg:pl-6">
+        <section aria-labelledby="overview-heading">
+          <h2 id="overview-heading" class="eyebrow">{copy.overview}</h2>
+          <LangText value={data.overview} as="p" class="mt-4 max-w-[62ch] text-[1.3125rem] leading-relaxed text-ink" notice />
+        </section>
+
+        <section aria-labelledby="includes-heading">
+          <h2 id="includes-heading" class="h2">{copy.includes}</h2>
+          <ul class="mt-8 grid gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-2" data-reveal>
+            {
+              data.focus.map((item, i) => (
+                <li id={item.id} class="scroll-mt-28 bg-surface p-6">
+                  <span class="meta tabular">{String(i + 1).padStart(2, '0')}</span>
+                  <LangText value={item.title} as="h3" class="h4 mt-3" />
+                  <LangText value={item.description} as="p" class="mt-2 text-ink-2" />
+                </li>
+              ))
+            }
+          </ul>
+          {
+            data.note && (
+              <div class="mt-6 flex gap-3 rounded-md border border-gold-100 bg-gold-50 p-4 text-ink" role="note">
+                <Icon name="info" size={20} class="mt-0.5 shrink-0 text-gold-700" />
+                <p>
+                  <span class="font-bold">{copy.note}:</span> <LangText value={data.note} />
+                </p>
+              </div>
+            )
+          }
+        </section>
+
+        {
+          data.audiences.length > 0 && (
+            <section aria-labelledby="audience-heading">
+              <h2 id="audience-heading" class="h3">
+                {copy.audience}
+              </h2>
+              <ul class="mt-5 flex flex-wrap gap-2">
+                {data.audiences.map((audience) => (
+                  <li class="rounded-sm border border-line bg-surface px-3.5 py-2 text-sm font-bold text-ink-2 shadow-xs">
+                    <LangText value={audience} />
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+
+        <section
+          aria-labelledby="area-cta-heading"
+          class:list={[
+            'rounded-md p-8 lg:p-10',
+            data.prominentCta ? 'on-dark bg-navy-900' : 'border border-line bg-surface shadow-xs',
+          ]}
+        >
+          <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h2 id="area-cta-heading" class:list={[data.prominentCta ? 'h2' : 'h3']}>
+                <LangText value={data.cta.label} />
+              </h2>
+              <p class:list={['mt-2', data.prominentCta ? 'text-on-dark-2' : 'text-ink-2']}>{t.whatWeDo.cta.text}</p>
+            </div>
+            <Button href={ctaHref} variant={data.prominentCta ? 'gold' : 'primary'} icon="arrow-right" class="shrink-0">
+              {ctaButton}
+            </Button>
+          </div>
+        </section>
+
+        <nav aria-label={copy.relatedTitle} class="grid gap-3 border-t border-line pt-8 sm:grid-cols-2">
+          {
+            previous ? (
+              <a href={path(workAreaPath(previous.id))} class="card card-interactive group flex flex-col p-5" rel="prev">
+                <span class="meta flex items-center gap-1.5">
+                  <Icon name="arrow-right" size={14} class="rotate-180" />
+                  {copy.previous}
+                </span>
+                <LangText value={previous.data.title} class="mt-2 font-bold text-ink" />
+              </a>
+            ) : (
+              <span />
+            )
+          }
+          {
+            next && (
+              <a href={path(workAreaPath(next.id))} class="card card-interactive group flex flex-col p-5 sm:text-right" rel="next">
+                <span class="meta flex items-center gap-1.5 sm:justify-end">
+                  {copy.next}
+                  <Icon name="arrow-right" size={14} />
+                </span>
+                <LangText value={next.data.title} class="mt-2 font-bold text-ink" />
+              </a>
+            )
+          }
+        </nav>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
